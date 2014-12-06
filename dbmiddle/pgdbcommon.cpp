@@ -165,7 +165,7 @@ SUser::SUser(soci::session& sqlsession):m_sql(sqlsession), m_stSUser(sqlsession)
     try
     {
     m_stSUser =  (m_sql.prepare <<
-    "insert into accuser( userid , username , pass , points , gain , jointime , lastlogintime ) \
+    "insert into user( userid , username , pass , points , gain , jointime , lastlogintime ) \
        values ( :userid , :username , :pass , :points , :gain , :jointime , :lastlogintime);" , 
         soci::use( m_userid, "userid"), 
         soci::use( m_username, "username"), 
