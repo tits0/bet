@@ -1,208 +1,22 @@
 #include "pgdbcommon.h"
 #include "soci/backends/postgresql/soci-postgresql.h"
 
-SCreateScheme::SCreateScheme(soci::session& sqlsession):m_sql(sqlsession), m_stCreateScheme(m_sql) 
-{
+const char *UID_TAG = "uid";    
+const char *SESSION_TAG = "session";
+const char *SCHEME_TAG = "session";
+const char *OPTIONS_TAG = "options"; 
 
-   try{
-        m_stCreateScheme = (m_sql.prepare <<
-        "insert into betscheme ( schemename, permission, createtime, endtime, usercreated ) values ( :schemename, :permission, :createtime, :endtime,  :usercreated);" , 
-        soci::use( m_schemename, "schemename") ,
-        soci::use(m_permission, "permission"), 
-        soci::use( m_createtime, "createtime" ), 
-        soci::use( m_endtime, "endtime" ), 
-        soci::use(m_usercreated, "usercreated")  );
-        
-    }
-    catch (std::exception const &e)
-    {
-        std::cerr << "Error: " << e.what() << '\n';
-        throw e; 
-    }
-}
+const char* sjson_0="{\"uid\":12345567, \"session\":\"7654321\" , \"scheme\":\"s1\", \"options\":[] }";
+const char* sjson_1="{\"uid\":12345567, \"session\":\"7654321\" , \"scheme\":\"s1\", \"options\":[\"opt1\"] }";
+const char* sjson_2="{\"uid\":12345567, \"session\":\"7654321\" , \"scheme\":\"s1\", \"options\":[\"opt1\", \"opt2\"] }";
+const char* sjson_20="{\"uid\":12345567, \"session\":\"7654321\" , \"scheme\":\"s1\", \"options\":[\"opt1\", \"opt2\", \"opt3\", \"opt4\", \"opt5\", \
+ \"opt6\", \"opt7\", \"opt8\", \"opt9\", \"opt10\", \"opt11\", \"opt12\", \"opt13\", \"opt14\", \"opt15\", \"opt16\", \"opt17\", \"opt18\", \"opt19\", \
+ \"opt20\"] }";
 
-void SCreateScheme::createRow(const std::string& schemename,
-    long     permission,
-    std::tm  createtime, 
-    std::tm  endtime ,
-    long     usercreated )
-{
-    //createtime.tm_isdst=0;
-    //endtime.tm_isdst=0;
-       try{
-            m_schemename = schemename;
-            m_permission = permission;
-            m_createtime = createtime;
-            m_endtime    = endtime;
-            m_usercreated = usercreated;
-            m_stCreateScheme.execute(true);
-       }
-        catch (std::exception const &e)
-        {
-            std::cerr << "Error: " << e.what() << '\n';
-            throw e; 
-        }
-}
-
-
-SCreateOptions::SCreateOptions(soci::session& sqlsession):m_sql(sqlsession), m_stCreateSchemeOptions(sqlsession)
-{
-    try
-    {
-
-    m_stCreateSchemeOptions =  (m_sql.prepare <<
-        "insert into option( schemename , optionname )  \
-       values ( :schemename, :optionname );" ,  
-        soci::use(m_schemename, "schemename") , 
-        soci::use(m_optname, "optionname") ) ;
-    }
-    catch (std::exception const &e)
-    {
-        std::cerr << "Error: " << e.what() << '\n';
-        throw e; 
-    }
-}
-
-void SCreateOptions::createRow(
-    const std::string& schemename,
-    const std::string& optname
-)
-{
-    m_schemename = schemename;
-    m_optname    = optname;
-    m_stCreateSchemeOptions.execute(true);
-}
-
-SCreateBet::SCreateBet(soci::session& sqlsession):m_sql(sqlsession), m_stCreateBet(sqlsession)
-{
-    try
-    {
-        m_stCreateBet =  (m_sql.prepare <<
-    "insert into bet( schemename , optionname, userid, approvedby, points , bettime ) \
-    values ( :schemename, :optionname, :userid , :approvedby, :points, :bettime );" , 
-    soci::use( m_schemename, "schemename"), 
-    soci::use(m_optname, "optionname"), 
-    soci::use(m_userid, "userid"), 
-    soci::use(m_approvedby, "approvedby"),
-    soci::use(m_points, "points"), 
-    soci::use(m_bettime, "bettime") );
-       }
-        catch (std::exception const &e)
-        {
-            std::cerr << "Error: " << e.what() << '\n';
-            throw e; 
-        }
-        
-}    
-
-void SCreateBet::createRow( const std::string& schemename,
-                const std::string& optname,
-                long        user,
-                long        approvedby,
-                long        points,
-                std::tm     bettime )
-{
-    m_schemename = schemename;
-    m_optname = optname;
-    m_userid = user;
-    m_approvedby  = approvedby;
-    m_points = points;
-    m_bettime = bettime;
-    m_stCreateBet.execute(true);
-    
-}
-
-SFinalizeScheme::SFinalizeScheme(soci::session& sqlsession):m_sql(sqlsession), m_stFinalizeScheme(sqlsession)
-{
-
-    try
-    {
-    m_stFinalizeScheme =  (m_sql.prepare <<
-    "insert into finalizebet( schemename , \
-      optionwon , optionofuser , userid , \
-      pointsinvested, gain , finalizetime ) \
-    values ( :schemename, :optionwon, :optionofuser, :userid, :pointsinvested, :gain, :finalizetime );" , 
-    soci::use( m_schemename, "schemename"), 
-    soci::use(m_optionwon, "optionwon"), 
-    soci::use(m_optionofuser, "optionofuser"), 
-    soci::use(m_userid, "userid"), 
-    soci::use(m_pointsinvested, "pointsinvested"),
-    soci::use(m_gain, "gain"), 
-    soci::use(m_finalizetime, "finalizetime") ) ;
-       }
-        catch (std::exception const &e)
-        {
-            std::cerr << "Error: " << e.what() << '\n';
-            throw e; 
-        }
-        
-}
-    
-void SFinalizeScheme::createRow( const std::string&  schemename,
-                    const std::string&  optionwon,
-                    const std::string&  optionofuser,
-                    long          user,
-                    long          pointsinvested,
-                    long          gain,
-                    std::tm       finalizetime)
-{
-    m_schemename = schemename;
-    m_optionwon = optionwon;
-    m_optionofuser = optionofuser;
-    m_userid = user;
-    m_pointsinvested = pointsinvested;
-    m_gain = gain;
-    m_finalizetime = finalizetime;
-    m_stFinalizeScheme.execute(true);
-                        
-}
-    
-
-
-SUser::SUser(soci::session& sqlsession):m_sql(sqlsession), m_stSUser(sqlsession)
-{
-
-    try
-    {
-    m_stSUser =  (m_sql.prepare <<
-    "insert into user( userid , username , pass , points , gain , jointime , lastlogintime ) \
-       values ( :userid , :username , :pass , :points , :gain , :jointime , :lastlogintime);" , 
-        soci::use( m_userid, "userid"), 
-        soci::use( m_username, "username"), 
-        soci::use( m_pass, "pass"), 
-        soci::use( m_points, "points"), 
-        soci::use( m_gain, "gain"),
-        soci::use(m_jointime, "jointime"), 
-        soci::use(m_lastlogintime, "lastlogintime") ) ;
-       }
-       catch (std::exception const &e)
-       {
-            std::cerr << "Error: " << e.what() << '\n';
-            throw e; 
-       }
-        
-}
-    
-void SUser::createRow( const long      userid,
-                    const std::string  username,
-                    const std::string  address,
-                    const std::string  pass,
-                    const long         points,
-                    const long         gain,
-                    const std::tm      jointime,
-                    const std::tm      lastlogintime
-                    )
-{
-    m_userid=userid;
-    m_username=username;
-    m_pass=pass;
-    m_points=points;
-    m_gain=gain;
-    m_jointime=jointime;
-    m_lastlogintime=lastlogintime;
-    m_stSUser.execute(true);
-}
-
+const char* sjson_22="{\"uid\":12345567, \"session\":\"7654321\" , \"scheme\":\"s1\", \"options\":[\"opt1\", \"opt2\", \"opt3\", \"opt4\", \"opt5\", \
+ \"opt6\", \"opt7\", \"opt8\", \"opt9\", \"opt10\", \"opt11\", \"opt12\", \"opt13\", \"opt14\", \"opt15\", \"opt16\", \"opt17\", \"opt18\", \"opt19\", \
+ \"opt20\", \"opt21\", \"opt22\"] }";
+   
 pgdbcommon* pgdbcommon::s_pgdbcommon=0;
 
 pgdbcommon* pgdbcommon::GetInstance()
@@ -217,19 +31,14 @@ pgdbcommon* pgdbcommon::GetInstance()
             std::cerr << "Error: " << e.what() << '\n';
             delete s_pgdbcommon;
             s_pgdbcommon=0;
-            throw e; 
+            throw e;
         }
         
     }
     return s_pgdbcommon;
 }
 
-pgdbcommon::pgdbcommon():m_sqlptr(new soci::session(soci::postgresql, "dbname=accountdb")),
-m_SCreateScheme(*(m_sqlptr.get())),
-m_SCreateOptions(  *(m_sqlptr.get())), 
-m_SCreateBet(*(m_sqlptr.get())), 
-m_SFinalizeScheme(*(m_sqlptr.get())),
-m_SUser(*(m_sqlptr.get()))
+pgdbcommon::pgdbcommon():m_sqlptr(new soci::session(soci::postgresql, "dbname=accountdb"))
 {
    m_logfile.open("dblog.log");
    m_sqlptr->set_log_stream(&m_logfile);
@@ -266,27 +75,33 @@ void pgdbcommon::createInitialScheme()
     soci::session& sql = *m_sqlptr.get();
     try
     {
-      sql << "create table user( u_id bigint auto, points numeric, name varchar, joindate timestamp, lastlogin timestamp);" ;
-      sql << "create table scheme( s_id bigint auto, schemename varchar, permission integer, createtime timestamp, endtime timestamp, uid_created bigint);" ;
-      sql << "create table schemearchive( s_id bigint, s_name varchar, s_permission integer, createtime timestamp, endtime timestamp, uid_created bigint, archivetime timestamp );" ;
+      sql << "DROP TABLE  IF EXISTS u_table  CASCADE;";
+      sql << "create table  IF NOT EXISTS  u_table ( u_id bigserial, u_idc varchar, points bigint, gain bigint, name varchar, namev varchar, joindate timestamp, lastlogin timestamp);" ;
+      sql << "DROP TABLE  IF EXISTS scheme  CASCADE;";
+      sql << "create table IF NOT EXISTS scheme( s_id bigserial, scheme_name varchar, permission integer, createtime timestamp, endtime timestamp, uid_created bigint, \
+       options integer ,\
+       opt_name_01 varchar, opt_name_02 varchar, opt_name_03 varchar, opt_name_04 varchar, opt_name_05 varchar, opt_name_06 varchar, opt_name_07 varchar,  opt_name_08 varchar,  opt_name_09 varchar,   opt_name_10 varchar, \
+       opt_name_11 varchar, opt_name_12 varchar, opt_name_13 varchar, opt_name_14 varchar, opt_name_15 varchar, opt_name_16 varchar, opt_name_17 varchar,  opt_name_18 varchar,  opt_name_19 varchar,   opt_name_20 varchar );" ;
       
-      sql << "create table option( opt_id bigint auto, schemeid bigint, opt_name varchar, optseq);" ;
-      sql << "create table optionarchive( opt_id bigint, schemename varchar, option_name varchar, archivetime timestamp );" ;
+      sql << "DROP TABLE  IF EXISTS schemearchive CASCADE;";
+      sql << "create table IF NOT EXISTS schemearchive( s_id bigint, scheme_name varchar, permission integer, createtime timestamp, endtime timestamp, uid_created bigint, archivetime timestamp );" ;
 
-      sql << "create table scheme_option_summary( s_id bigint, no_of_opts int \
-                  seq1 bigint, seq2 bigint, seq3 bigint, \
-                  seq4 bigint, seq5 bigint, seq6 bigint, seq7 bigint, seq8 bigint, seq9 bigint, seq10 bigint, \
-                  seq11 bigint, seq12 bigint, seq13 bigint, seq14 bigint, seq15 bigint, seq16 bigint, seq17 bigint, \
-                  seq18 bigint, seq19 bigint, seq20 bigint, \
-                  placed_seq1 bigint, placed_seq2 bigint, placed_seq3 bigint, \
-                  placed_seq4 bigint, placed_seq5 bigint, placed_seq6 bigint, placed_seq7 bigint, placed_seq8 bigint, placed_seq9 bigint, placed_seq10 bigint, \
-                  placed_seq11 bigint, placed_seq12 bigint, placed_seq13 bigint, placed_seq14 bigint, placed_seq15 bigint, placed_seq16 bigint, placed_seq17 bigint, \
-                  placed_seq18 bigint, placed_seq19 bigint, placed_seq20 bigint, \
-                  total number);" ;
+      sql << "DROP TABLE  IF EXISTS scheme_option_summary CASCADE;";
+      sql << "create table IF NOT EXISTS scheme_option_summary( s_id bigint, no_of_opts int, \
+                  seq_01 bigint, seq_02 bigint, seq_03 bigint, \
+                  seq_04 bigint, seq_05 bigint, seq_06 bigint, seq_07 bigint, seq_08 bigint, seq_09 bigint, seq_10 bigint, \
+                  seq_11 bigint, seq_12 bigint, seq_13 bigint, seq_14 bigint, seq_15 bigint, seq_16 bigint, seq_17 bigint, \
+                  seq_18 bigint, seq_19 bigint, seq_20 bigint, \
+                  placed_seq_01 bigint, placed_seq_02 bigint, placed_seq_03 bigint, \
+                  placed_seq_04 bigint, placed_seq_05 bigint, placed_seq_06 bigint, placed_seq_07 bigint, placed_seq_08 bigint, placed_seq_09 bigint, placed_seq_10 bigint, \
+                  placed_seq_11 bigint, placed_seq_12 bigint, placed_seq_13 bigint, placed_seq_14 bigint, placed_seq_15 bigint, placed_seq_16 bigint, placed_seq_17 bigint, \
+                  placed_seq_18 bigint, placed_seq_19 bigint, placed_seq_20 bigint, \
+                  total numeric);" ;
        //gain_1 = (total-seq1)
        //gain_1 = (total-seq1) opt_id1_1/seq1
  
-      sql << "create table u_scheme_option_summary( u_id bigint, s_id bigint, \
+      sql << "DROP TABLE IF EXISTS u_scheme_option_summary CASCADE;";
+      sql << "create table IF NOT EXISTS u_scheme_option_summary( u_id bigint, s_id bigint, \
                   sid_1 bigint, opts_1 int,\
                   opt_id1_1 bigint, opt_id1_2 bigint, opt_id1_3 bigint, \
                   opt_id1_4 bigint, opt_id1_5 bigint,  \
@@ -347,18 +162,27 @@ void pgdbcommon::createInitialScheme()
                   opt_gain_id10_1 bigint, opt_gain_id10_2 bigint, opt_gain_id10_3 bigint, \
                   opt_gain_id10_4 bigint, opt_gain_id10_5 bigint,  \
                   total_10 bigint, total_gain_10 bigint, \
-                  total bigint);" ;
+                  total numeric);" ;
 
 
-      sql << "create table  bet( s_id bigint, opt_id bigint, u_id bigint,  points bigint,\
+      sql << "DROP TABLE IF EXISTS bet CASCADE;";
+      sql << "create table  IF NOT EXISTS bet( s_id bigint, opt_id bigint, u_id bigint,  points bigint,\
         bettime timestamp );" ;
         
-      sql << "create table  bet_archive( s_id bigint, opt_id bigint, u_id bigint, points bigint,\
+      sql << "DROP TABLE IF EXISTS bet_archive CASCADE;";
+      sql << "create table IF NOT EXISTS  bet_archive( s_id bigint, opt_id bigint, u_id bigint, points bigint,\
         bettime timestamp, archivetime timestamp );" ;
 
-      sql << "create table finalizebet( schemename varchar, \
-      optionwon varchar, optionofuser varchar, userid bigint, \
-      pointsinvested bigint, gain bigint, finalizetime timestamp );" ;
+      sql << "DROP TABLE IF EXISTS finalizebet CASCADE;";
+      sql << "create table IF NOT EXISTS finalizebet( s_id bigint, \
+      opt_won bigint, opt_of_user bigint, u_id bigint, \
+      points_invested bigint, gain bigint, finalizetime timestamp );" ;
+      
+      m_SCreateScheme.reset( new SCreateScheme(*m_sqlptr.get() ) );
+      
+      m_SCreateBet.reset( new SCreateBet(*m_sqlptr.get() ) );
+      m_SFinalizeScheme.reset(new SFinalizeScheme(*m_sqlptr.get()) ); 
+      m_SUser.reset( new SUser(*m_sqlptr.get()) );
       
     }
     catch (std::exception const &e)
@@ -367,21 +191,28 @@ void pgdbcommon::createInitialScheme()
     }    
 }
 
-
-
-void pgdbcommon::createScheme(const std::string& schemename,
-                long     permission,
-                std::tm  createtime, 
-                std::tm  endtime ,
-                long     usercreated )
+void pgdbcommon::createScheme(
+        const std::string& schemename,
+        int64_t  permission,
+        std::tm  createtime, 
+        std::tm  endtime,
+        int64_t  usercreated,
+        const Json::Value& opt_array)
 {
     try
     {
-        m_SCreateScheme.createRow(schemename,
+        OPT_ARRAY optarr;
+        for(unsigned int j=0; j< opt_array.size(); j++) {
+            if(j>=MAX_OPTS) 
+                break;
+            optarr.push_back(opt_array[j].asString()) ;
+        }     
+        m_SCreateScheme->createRow(schemename,
                     permission,
-                    createtime, 
+                    createtime,
                     endtime ,
-                    usercreated );
+                    usercreated, 
+                    optarr);
 
     }
     catch (std::exception const &e)
@@ -392,34 +223,19 @@ void pgdbcommon::createScheme(const std::string& schemename,
 
 }
 
-void pgdbcommon::createSchemeOptions(const std::string& schemename,
-                const std::string&  optname)
+
+void pgdbcommon::createBet( 
+    const int64_t  scheme_id,
+    const int64_t opt_id,
+    long        user,
+    long        approvedby,
+    long        points,
+    std::tm     bettime )
 {
     try
     {
-        m_SCreateOptions.createRow( schemename,
-                            optname);
-
-    }
-    catch (std::exception const &e)
-    {
-        std::cerr << "Error: " << e.what() << '\n';
-        throw e; 
-    }
-
-}
-
-void pgdbcommon::createBet( const std::string& schemename,
-                const std::string& optname,
-                long        user,
-                long        approvedby,
-                long        points,
-                std::tm     bettime )
-{
-    try
-    {
-        m_SCreateBet.createRow(schemename,
-                optname,
+        m_SCreateBet->createRow(scheme_id,
+                opt_id,
                 user,
                 approvedby,
                 points,
@@ -434,17 +250,19 @@ void pgdbcommon::createBet( const std::string& schemename,
 }
 
 
-void pgdbcommon::finalizeBet( const std::string&  schemename,
-                const std::string&  optionwon,
-                const std::string&  optionofuser,
-                long          user,
-                long          pointsinvested,
-                long          gain,
-                std::tm       finalizetime)
+void pgdbcommon::finalizeBet(
+        const int64_t scheme_id,
+        const int64_t optionwon,
+        const int64_t optionofuser,
+        const int64_t user,
+        const int64_t pointsinvested,
+        const int64_t gain,
+        std::tm       finalizetime
+        )
 {
     try
     {
-        m_SFinalizeScheme.createRow(schemename, 
+        m_SFinalizeScheme->createRow(scheme_id, 
                 optionwon,
                 optionofuser,
                 user,
@@ -459,12 +277,12 @@ void pgdbcommon::finalizeBet( const std::string&  schemename,
     }
 }
 
-void pgdbcommon::createuser( const long   userid,
-                    const std::string  username,
-                    const std::string  address,
-                    const std::string  pass,
-                    const long         points,
-                    const long         gain,
+int64_t  pgdbcommon::createuser( 
+                    const std::string&  username,
+                    const std::string&  address,
+                    const std::string&  pass,
+                    const int64_t      points,
+                    const int64_t      gain,
                     const std::tm      jointime,
                     const std::tm      lastlogintime
                     )
@@ -473,7 +291,7 @@ void pgdbcommon::createuser( const long   userid,
     try
     {
         
-       m_SUser.createRow( userid,
+       m_SUser->createRow( 
                     username,
                     address,
                     pass,
@@ -488,10 +306,29 @@ void pgdbcommon::createuser( const long   userid,
         std::cerr << "Error: " << e.what() << '\n';
         throw e; 
     }
+    return m_SUser->getUID();
 }
 
 
-void testpgdbcommon::testCreateScheme() {
+Json::Value testpgdbcommon::testparseJSON(std::string spjson) {
+    Json::Reader reader;
+    Json::Value root;
+    bool parsingSuccessful = false;
+    if (false == (parsingSuccessful = reader.parse (spjson, root)))
+    {
+        std::cerr<<"\nFailed to parse configuration:"
+        <<reader.getFormatedErrorMessages ();
+        return 0;
+    }
+    Json::Value uid = root.get (UID_TAG,0);    
+    Json::Value session = root.get (SESSION_TAG,0);
+    Json::Value scheme = root.get (SCHEME_TAG,0);
+    Json::Value options = root.get (OPTIONS_TAG,0); 
+    return root;
+}
+
+
+void testpgdbcommon::testCreateInitialScheme() {
     pgdbcommon* pPgdbcommon  =   pgdbcommon::GetInstance();
  
     boost::posix_time::ptime createdTime = boost::posix_time::second_clock::universal_time();
@@ -503,7 +340,42 @@ void testpgdbcommon::testCreateScheme() {
 
     std::cout << "endtimecal:" << endtimecal << std::endl;
     
-    std::string schemename="s1";
-    pPgdbcommon->createScheme((std::string&)schemename, (long)1, 
-    boost::posix_time::to_tm(createdTime), boost::posix_time::to_tm(endtimecal) , 1);
+    pPgdbcommon->createInitialScheme();
 }
+
+void testpgdbcommon::testCreateScheme() {
+    pgdbcommon* pPgdbcommon = pgdbcommon::GetInstance();
+ 
+    boost::posix_time::ptime createdTime = boost::posix_time::second_clock::universal_time();
+    std::cout << "createdTime:" << createdTime << std::endl;
+    boost::posix_time::ptime endtimecal(createdTime);
+    std::cout << "endtimecal date:" << endtimecal << std::endl;
+    endtimecal = endtimecal +  boost::gregorian::days(0) + boost::posix_time::hours(1);
+    std::cout << "endtimecal date+hour:" << endtimecal << std::endl;
+
+    std::cout << "endtimecal:" << endtimecal << std::endl;
+    
+    std::string schemename="s1";
+    Json::Value optdata ;
+
+    optdata = this->testparseJSON(sjson_0);
+    pPgdbcommon->createScheme((std::string&)schemename, (long)1, 
+    boost::posix_time::to_tm(createdTime), boost::posix_time::to_tm(endtimecal) , 1, optdata[OPTIONS_TAG] );
+
+    optdata = this->testparseJSON(sjson_1);
+    pPgdbcommon->createScheme((std::string&)schemename, (long)1, 
+    boost::posix_time::to_tm(createdTime), boost::posix_time::to_tm(endtimecal) , 1, optdata[OPTIONS_TAG] );
+
+    optdata = this->testparseJSON(sjson_2);
+    pPgdbcommon->createScheme((std::string&)schemename, (long)1, 
+    boost::posix_time::to_tm(createdTime), boost::posix_time::to_tm(endtimecal) , 1, optdata[OPTIONS_TAG] );
+
+    optdata = this->testparseJSON(sjson_20);
+    pPgdbcommon->createScheme((std::string&)schemename, (long)1, 
+    boost::posix_time::to_tm(createdTime), boost::posix_time::to_tm(endtimecal) , 1, optdata[OPTIONS_TAG] );
+
+    optdata = this->testparseJSON(sjson_22);
+    pPgdbcommon->createScheme((std::string&)schemename, (long)1, 
+    boost::posix_time::to_tm(createdTime), boost::posix_time::to_tm(endtimecal) , 1, optdata[OPTIONS_TAG] );
+}
+

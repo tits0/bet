@@ -13,7 +13,7 @@ CurrentFileName        :=
 CurrentFilePath        :=
 CurrentFileFullPath    :=
 User                   :=anandrathi
-Date                   :=12/01/14
+Date                   :=12/19/14
 CodeLitePath           :="/home/anandrathi/.codelite"
 LinkerName             :=/usr/bin/g++ 
 SharedObjectLinkerName :=/usr/bin/g++ -shared -fPIC
@@ -36,12 +36,12 @@ ObjectsFileList        :="dbmiddle.txt"
 PCHCompileFlags        :=
 MakeDirCommand         :=mkdir -p
 LinkOptions            :=  
-IncludePath            :=  $(IncludeSwitch). $(IncludeSwitch). $(IncludeSwitch)./soci/ $(IncludeSwitch)./soci/core/ 
+IncludePath            :=  $(IncludeSwitch). $(IncludeSwitch). $(IncludeSwitch)./soci/ $(IncludeSwitch)./soci/core/ $(IncludeSwitch)./jsoncpp/include 
 IncludePCH             := 
 RcIncludePath          := 
-Libs                   := $(LibrarySwitch)soci_core $(LibrarySwitch)soci_mysql $(LibrarySwitch)soci_postgresql 
-ArLibs                 :=  "soci_core" "soci_mysql" "soci_postgresql" 
-LibPath                := $(LibraryPathSwitch). $(LibraryPathSwitch)./soci/build/lib 
+Libs                   := $(LibrarySwitch)soci_core $(LibrarySwitch)soci_mysql $(LibrarySwitch)soci_postgresql $(LibrarySwitch)jsoncpp 
+ArLibs                 :=  "soci_core" "soci_mysql" "soci_postgresql" "libjsoncpp.a" 
+LibPath                := $(LibraryPathSwitch). $(LibraryPathSwitch)./soci/build/lib $(LibraryPathSwitch)./jsoncpp/build/lib 
 
 ##
 ## Common variables
@@ -60,7 +60,8 @@ AS       := /usr/bin/as
 ## User defined environment variables
 ##
 CodeLiteDir:=/usr/share/codelite
-Objects0=$(IntermediateDirectory)/main.cpp$(ObjectSuffix) $(IntermediateDirectory)/pgdbcommon.cpp$(ObjectSuffix) 
+LD_LIBRARY_PATH:=./soci/build/lib;../soci/build/lib
+Objects0=$(IntermediateDirectory)/main.cpp$(ObjectSuffix) $(IntermediateDirectory)/pgdbcommon.cpp$(ObjectSuffix) $(IntermediateDirectory)/SCreateScheme.cpp$(ObjectSuffix) $(IntermediateDirectory)/SCreateBet.cpp$(ObjectSuffix) $(IntermediateDirectory)/SFinalizeScheme.cpp$(ObjectSuffix) $(IntermediateDirectory)/SUser.cpp$(ObjectSuffix) 
 
 
 
@@ -102,6 +103,38 @@ $(IntermediateDirectory)/pgdbcommon.cpp$(DependSuffix): pgdbcommon.cpp
 
 $(IntermediateDirectory)/pgdbcommon.cpp$(PreprocessSuffix): pgdbcommon.cpp
 	@$(CXX) $(CXXFLAGS) $(IncludePCH) $(IncludePath) $(PreprocessOnlySwitch) $(OutputSwitch) $(IntermediateDirectory)/pgdbcommon.cpp$(PreprocessSuffix) "pgdbcommon.cpp"
+
+$(IntermediateDirectory)/SCreateScheme.cpp$(ObjectSuffix): SCreateScheme.cpp $(IntermediateDirectory)/SCreateScheme.cpp$(DependSuffix)
+	$(CXX) $(IncludePCH) $(SourceSwitch) "/home/anandrathi/sre/baccount/dbmiddle/SCreateScheme.cpp" $(CXXFLAGS) $(ObjectSwitch)$(IntermediateDirectory)/SCreateScheme.cpp$(ObjectSuffix) $(IncludePath)
+$(IntermediateDirectory)/SCreateScheme.cpp$(DependSuffix): SCreateScheme.cpp
+	@$(CXX) $(CXXFLAGS) $(IncludePCH) $(IncludePath) -MG -MP -MT$(IntermediateDirectory)/SCreateScheme.cpp$(ObjectSuffix) -MF$(IntermediateDirectory)/SCreateScheme.cpp$(DependSuffix) -MM "SCreateScheme.cpp"
+
+$(IntermediateDirectory)/SCreateScheme.cpp$(PreprocessSuffix): SCreateScheme.cpp
+	@$(CXX) $(CXXFLAGS) $(IncludePCH) $(IncludePath) $(PreprocessOnlySwitch) $(OutputSwitch) $(IntermediateDirectory)/SCreateScheme.cpp$(PreprocessSuffix) "SCreateScheme.cpp"
+
+$(IntermediateDirectory)/SCreateBet.cpp$(ObjectSuffix): SCreateBet.cpp $(IntermediateDirectory)/SCreateBet.cpp$(DependSuffix)
+	$(CXX) $(IncludePCH) $(SourceSwitch) "/home/anandrathi/sre/baccount/dbmiddle/SCreateBet.cpp" $(CXXFLAGS) $(ObjectSwitch)$(IntermediateDirectory)/SCreateBet.cpp$(ObjectSuffix) $(IncludePath)
+$(IntermediateDirectory)/SCreateBet.cpp$(DependSuffix): SCreateBet.cpp
+	@$(CXX) $(CXXFLAGS) $(IncludePCH) $(IncludePath) -MG -MP -MT$(IntermediateDirectory)/SCreateBet.cpp$(ObjectSuffix) -MF$(IntermediateDirectory)/SCreateBet.cpp$(DependSuffix) -MM "SCreateBet.cpp"
+
+$(IntermediateDirectory)/SCreateBet.cpp$(PreprocessSuffix): SCreateBet.cpp
+	@$(CXX) $(CXXFLAGS) $(IncludePCH) $(IncludePath) $(PreprocessOnlySwitch) $(OutputSwitch) $(IntermediateDirectory)/SCreateBet.cpp$(PreprocessSuffix) "SCreateBet.cpp"
+
+$(IntermediateDirectory)/SFinalizeScheme.cpp$(ObjectSuffix): SFinalizeScheme.cpp $(IntermediateDirectory)/SFinalizeScheme.cpp$(DependSuffix)
+	$(CXX) $(IncludePCH) $(SourceSwitch) "/home/anandrathi/sre/baccount/dbmiddle/SFinalizeScheme.cpp" $(CXXFLAGS) $(ObjectSwitch)$(IntermediateDirectory)/SFinalizeScheme.cpp$(ObjectSuffix) $(IncludePath)
+$(IntermediateDirectory)/SFinalizeScheme.cpp$(DependSuffix): SFinalizeScheme.cpp
+	@$(CXX) $(CXXFLAGS) $(IncludePCH) $(IncludePath) -MG -MP -MT$(IntermediateDirectory)/SFinalizeScheme.cpp$(ObjectSuffix) -MF$(IntermediateDirectory)/SFinalizeScheme.cpp$(DependSuffix) -MM "SFinalizeScheme.cpp"
+
+$(IntermediateDirectory)/SFinalizeScheme.cpp$(PreprocessSuffix): SFinalizeScheme.cpp
+	@$(CXX) $(CXXFLAGS) $(IncludePCH) $(IncludePath) $(PreprocessOnlySwitch) $(OutputSwitch) $(IntermediateDirectory)/SFinalizeScheme.cpp$(PreprocessSuffix) "SFinalizeScheme.cpp"
+
+$(IntermediateDirectory)/SUser.cpp$(ObjectSuffix): SUser.cpp $(IntermediateDirectory)/SUser.cpp$(DependSuffix)
+	$(CXX) $(IncludePCH) $(SourceSwitch) "/home/anandrathi/sre/baccount/dbmiddle/SUser.cpp" $(CXXFLAGS) $(ObjectSwitch)$(IntermediateDirectory)/SUser.cpp$(ObjectSuffix) $(IncludePath)
+$(IntermediateDirectory)/SUser.cpp$(DependSuffix): SUser.cpp
+	@$(CXX) $(CXXFLAGS) $(IncludePCH) $(IncludePath) -MG -MP -MT$(IntermediateDirectory)/SUser.cpp$(ObjectSuffix) -MF$(IntermediateDirectory)/SUser.cpp$(DependSuffix) -MM "SUser.cpp"
+
+$(IntermediateDirectory)/SUser.cpp$(PreprocessSuffix): SUser.cpp
+	@$(CXX) $(CXXFLAGS) $(IncludePCH) $(IncludePath) $(PreprocessOnlySwitch) $(OutputSwitch) $(IntermediateDirectory)/SUser.cpp$(PreprocessSuffix) "SUser.cpp"
 
 
 -include $(IntermediateDirectory)/*$(DependSuffix)
