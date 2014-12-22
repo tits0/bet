@@ -1,21 +1,9 @@
 #include "pgdbcommon.h"
 #include "soci/backends/postgresql/soci-postgresql.h"
+#include "general_macros.h"
+#include "error_codes.h"
 
-const char *UID_TAG = "uid";    
-const char *SESSION_TAG = "session";
-const char *SCHEME_TAG = "session";
-const char *OPTIONS_TAG = "options"; 
 
-const char* sjson_0="{\"uid\":12345567, \"session\":\"7654321\" , \"scheme\":\"s1\", \"options\":[] }";
-const char* sjson_1="{\"uid\":12345567, \"session\":\"7654321\" , \"scheme\":\"s1\", \"options\":[\"opt1\"] }";
-const char* sjson_2="{\"uid\":12345567, \"session\":\"7654321\" , \"scheme\":\"s1\", \"options\":[\"opt1\", \"opt2\"] }";
-const char* sjson_20="{\"uid\":12345567, \"session\":\"7654321\" , \"scheme\":\"s1\", \"options\":[\"opt1\", \"opt2\", \"opt3\", \"opt4\", \"opt5\", \
- \"opt6\", \"opt7\", \"opt8\", \"opt9\", \"opt10\", \"opt11\", \"opt12\", \"opt13\", \"opt14\", \"opt15\", \"opt16\", \"opt17\", \"opt18\", \"opt19\", \
- \"opt20\"] }";
-
-const char* sjson_22="{\"uid\":12345567, \"session\":\"7654321\" , \"scheme\":\"s1\", \"options\":[\"opt1\", \"opt2\", \"opt3\", \"opt4\", \"opt5\", \
- \"opt6\", \"opt7\", \"opt8\", \"opt9\", \"opt10\", \"opt11\", \"opt12\", \"opt13\", \"opt14\", \"opt15\", \"opt16\", \"opt17\", \"opt18\", \"opt19\", \
- \"opt20\", \"opt21\", \"opt22\"] }";
    
 pgdbcommon* pgdbcommon::s_pgdbcommon=0;
 
@@ -191,7 +179,7 @@ void pgdbcommon::createInitialScheme()
     }    
 }
 
-void pgdbcommon::createScheme(
+int64_t pgdbcommon::createScheme(
         const std::string& schemename,
         int64_t  permission,
         std::tm  createtime, 
@@ -199,15 +187,16 @@ void pgdbcommon::createScheme(
         int64_t  usercreated,
         const Json::Value& opt_array)
 {
+    int64_t ret = ERROR_OK;
     try
     {
         OPT_ARRAY optarr;
         for(unsigned int j=0; j< opt_array.size(); j++) {
-            if(j>=MAX_OPTS) 
+            if(j>=MAX_OPTS_BACCT) 
                 break;
             optarr.push_back(opt_array[j].asString()) ;
         }     
-        m_SCreateScheme->createRow(schemename,
+        ret = m_SCreateScheme->createRow(schemename,
                     permission,
                     createtime,
                     endtime ,
@@ -221,10 +210,11 @@ void pgdbcommon::createScheme(
         throw e; 
     }
 
+    return ret;
 }
 
 
-void pgdbcommon::createBet( 
+int pgdbcommon::createBet( 
     const int64_t  scheme_id,
     const int64_t opt_id,
     long        user,
@@ -232,9 +222,10 @@ void pgdbcommon::createBet(
     long        points,
     std::tm     bettime )
 {
+    int ret=ERROR_OTHER;
     try
     {
-        m_SCreateBet->createRow(scheme_id,
+        ret=m_SCreateBet->createRow(scheme_id,
                 opt_id,
                 user,
                 approvedby,
@@ -247,6 +238,7 @@ void pgdbcommon::createBet(
         std::cerr << "Error: " << e.what() << '\n';
         throw e; 
     }
+    return ret;
 }
 
 
@@ -309,73 +301,4 @@ int64_t  pgdbcommon::createuser(
     return m_SUser->getUID();
 }
 
-
-Json::Value testpgdbcommon::testparseJSON(std::string spjson) {
-    Json::Reader reader;
-    Json::Value root;
-    bool parsingSuccessful = false;
-    if (false == (parsingSuccessful = reader.parse (spjson, root)))
-    {
-        std::cerr<<"\nFailed to parse configuration:"
-        <<reader.getFormatedErrorMessages ();
-        return 0;
-    }
-    Json::Value uid = root.get (UID_TAG,0);    
-    Json::Value session = root.get (SESSION_TAG,0);
-    Json::Value scheme = root.get (SCHEME_TAG,0);
-    Json::Value options = root.get (OPTIONS_TAG,0); 
-    return root;
-}
-
-
-void testpgdbcommon::testCreateInitialScheme() {
-    pgdbcommon* pPgdbcommon  =   pgdbcommon::GetInstance();
- 
-    boost::posix_time::ptime createdTime = boost::posix_time::second_clock::universal_time();
-    std::cout << "createdTime:" << createdTime << std::endl;
-    boost::posix_time::ptime endtimecal(createdTime);
-    std::cout << "endtimecal date:" << endtimecal << std::endl;
-    endtimecal = endtimecal +  boost::gregorian::days(0) + boost::posix_time::hours(1);
-    std::cout << "endtimecal date+hour:" << endtimecal << std::endl;
-
-    std::cout << "endtimecal:" << endtimecal << std::endl;
-    
-    pPgdbcommon->createInitialScheme();
-}
-
-void testpgdbcommon::testCreateScheme() {
-    pgdbcommon* pPgdbcommon = pgdbcommon::GetInstance();
- 
-    boost::posix_time::ptime createdTime = boost::posix_time::second_clock::universal_time();
-    std::cout << "createdTime:" << createdTime << std::endl;
-    boost::posix_time::ptime endtimecal(createdTime);
-    std::cout << "endtimecal date:" << endtimecal << std::endl;
-    endtimecal = endtimecal +  boost::gregorian::days(0) + boost::posix_time::hours(1);
-    std::cout << "endtimecal date+hour:" << endtimecal << std::endl;
-
-    std::cout << "endtimecal:" << endtimecal << std::endl;
-    
-    std::string schemename="s1";
-    Json::Value optdata ;
-
-    optdata = this->testparseJSON(sjson_0);
-    pPgdbcommon->createScheme((std::string&)schemename, (long)1, 
-    boost::posix_time::to_tm(createdTime), boost::posix_time::to_tm(endtimecal) , 1, optdata[OPTIONS_TAG] );
-
-    optdata = this->testparseJSON(sjson_1);
-    pPgdbcommon->createScheme((std::string&)schemename, (long)1, 
-    boost::posix_time::to_tm(createdTime), boost::posix_time::to_tm(endtimecal) , 1, optdata[OPTIONS_TAG] );
-
-    optdata = this->testparseJSON(sjson_2);
-    pPgdbcommon->createScheme((std::string&)schemename, (long)1, 
-    boost::posix_time::to_tm(createdTime), boost::posix_time::to_tm(endtimecal) , 1, optdata[OPTIONS_TAG] );
-
-    optdata = this->testparseJSON(sjson_20);
-    pPgdbcommon->createScheme((std::string&)schemename, (long)1, 
-    boost::posix_time::to_tm(createdTime), boost::posix_time::to_tm(endtimecal) , 1, optdata[OPTIONS_TAG] );
-
-    optdata = this->testparseJSON(sjson_22);
-    pPgdbcommon->createScheme((std::string&)schemename, (long)1, 
-    boost::posix_time::to_tm(createdTime), boost::posix_time::to_tm(endtimecal) , 1, optdata[OPTIONS_TAG] );
-}
 

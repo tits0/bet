@@ -13,7 +13,7 @@ CurrentFileName        :=
 CurrentFilePath        :=
 CurrentFileFullPath    :=
 User                   :=anandrathi
-Date                   :=12/19/14
+Date                   :=12/23/14
 CodeLitePath           :="/home/anandrathi/.codelite"
 LinkerName             :=/usr/bin/g++ 
 SharedObjectLinkerName :=/usr/bin/g++ -shared -fPIC
@@ -50,7 +50,7 @@ LibPath                := $(LibraryPathSwitch). $(LibraryPathSwitch)./soci/build
 AR       := /usr/bin/ar rcu
 CXX      := /usr/bin/g++ 
 CC       := /usr/bin/gcc 
-CXXFLAGS :=  -g -O0 -Wall $(Preprocessors)
+CXXFLAGS :=  -g -O0 -std=c++11 -Wall $(Preprocessors)
 CFLAGS   :=  -g -O0 -Wall $(Preprocessors)
 ASFLAGS  := 
 AS       := /usr/bin/as 
@@ -61,7 +61,7 @@ AS       := /usr/bin/as
 ##
 CodeLiteDir:=/usr/share/codelite
 LD_LIBRARY_PATH:=./soci/build/lib;../soci/build/lib
-Objects0=$(IntermediateDirectory)/main.cpp$(ObjectSuffix) $(IntermediateDirectory)/pgdbcommon.cpp$(ObjectSuffix) $(IntermediateDirectory)/SCreateScheme.cpp$(ObjectSuffix) $(IntermediateDirectory)/SCreateBet.cpp$(ObjectSuffix) $(IntermediateDirectory)/SFinalizeScheme.cpp$(ObjectSuffix) $(IntermediateDirectory)/SUser.cpp$(ObjectSuffix) 
+Objects0=$(IntermediateDirectory)/main.cpp$(ObjectSuffix) $(IntermediateDirectory)/pgdbcommon.cpp$(ObjectSuffix) $(IntermediateDirectory)/SCreateScheme.cpp$(ObjectSuffix) $(IntermediateDirectory)/SCreateBet.cpp$(ObjectSuffix) $(IntermediateDirectory)/SFinalizeScheme.cpp$(ObjectSuffix) $(IntermediateDirectory)/SUser.cpp$(ObjectSuffix) $(IntermediateDirectory)/error_codes.cpp$(ObjectSuffix) $(IntermediateDirectory)/UnitTest.cpp$(ObjectSuffix) $(IntermediateDirectory)/LocalCaches.cpp$(ObjectSuffix) 
 
 
 
@@ -135,6 +135,30 @@ $(IntermediateDirectory)/SUser.cpp$(DependSuffix): SUser.cpp
 
 $(IntermediateDirectory)/SUser.cpp$(PreprocessSuffix): SUser.cpp
 	@$(CXX) $(CXXFLAGS) $(IncludePCH) $(IncludePath) $(PreprocessOnlySwitch) $(OutputSwitch) $(IntermediateDirectory)/SUser.cpp$(PreprocessSuffix) "SUser.cpp"
+
+$(IntermediateDirectory)/error_codes.cpp$(ObjectSuffix): error_codes.cpp $(IntermediateDirectory)/error_codes.cpp$(DependSuffix)
+	$(CXX) $(IncludePCH) $(SourceSwitch) "/home/anandrathi/sre/baccount/dbmiddle/error_codes.cpp" $(CXXFLAGS) $(ObjectSwitch)$(IntermediateDirectory)/error_codes.cpp$(ObjectSuffix) $(IncludePath)
+$(IntermediateDirectory)/error_codes.cpp$(DependSuffix): error_codes.cpp
+	@$(CXX) $(CXXFLAGS) $(IncludePCH) $(IncludePath) -MG -MP -MT$(IntermediateDirectory)/error_codes.cpp$(ObjectSuffix) -MF$(IntermediateDirectory)/error_codes.cpp$(DependSuffix) -MM "error_codes.cpp"
+
+$(IntermediateDirectory)/error_codes.cpp$(PreprocessSuffix): error_codes.cpp
+	@$(CXX) $(CXXFLAGS) $(IncludePCH) $(IncludePath) $(PreprocessOnlySwitch) $(OutputSwitch) $(IntermediateDirectory)/error_codes.cpp$(PreprocessSuffix) "error_codes.cpp"
+
+$(IntermediateDirectory)/UnitTest.cpp$(ObjectSuffix): UnitTest.cpp $(IntermediateDirectory)/UnitTest.cpp$(DependSuffix)
+	$(CXX) $(IncludePCH) $(SourceSwitch) "/home/anandrathi/sre/baccount/dbmiddle/UnitTest.cpp" $(CXXFLAGS) $(ObjectSwitch)$(IntermediateDirectory)/UnitTest.cpp$(ObjectSuffix) $(IncludePath)
+$(IntermediateDirectory)/UnitTest.cpp$(DependSuffix): UnitTest.cpp
+	@$(CXX) $(CXXFLAGS) $(IncludePCH) $(IncludePath) -MG -MP -MT$(IntermediateDirectory)/UnitTest.cpp$(ObjectSuffix) -MF$(IntermediateDirectory)/UnitTest.cpp$(DependSuffix) -MM "UnitTest.cpp"
+
+$(IntermediateDirectory)/UnitTest.cpp$(PreprocessSuffix): UnitTest.cpp
+	@$(CXX) $(CXXFLAGS) $(IncludePCH) $(IncludePath) $(PreprocessOnlySwitch) $(OutputSwitch) $(IntermediateDirectory)/UnitTest.cpp$(PreprocessSuffix) "UnitTest.cpp"
+
+$(IntermediateDirectory)/LocalCaches.cpp$(ObjectSuffix): LocalCaches.cpp $(IntermediateDirectory)/LocalCaches.cpp$(DependSuffix)
+	$(CXX) $(IncludePCH) $(SourceSwitch) "/home/anandrathi/sre/baccount/dbmiddle/LocalCaches.cpp" $(CXXFLAGS) $(ObjectSwitch)$(IntermediateDirectory)/LocalCaches.cpp$(ObjectSuffix) $(IncludePath)
+$(IntermediateDirectory)/LocalCaches.cpp$(DependSuffix): LocalCaches.cpp
+	@$(CXX) $(CXXFLAGS) $(IncludePCH) $(IncludePath) -MG -MP -MT$(IntermediateDirectory)/LocalCaches.cpp$(ObjectSuffix) -MF$(IntermediateDirectory)/LocalCaches.cpp$(DependSuffix) -MM "LocalCaches.cpp"
+
+$(IntermediateDirectory)/LocalCaches.cpp$(PreprocessSuffix): LocalCaches.cpp
+	@$(CXX) $(CXXFLAGS) $(IncludePCH) $(IncludePath) $(PreprocessOnlySwitch) $(OutputSwitch) $(IntermediateDirectory)/LocalCaches.cpp$(PreprocessSuffix) "LocalCaches.cpp"
 
 
 -include $(IntermediateDirectory)/*$(DependSuffix)

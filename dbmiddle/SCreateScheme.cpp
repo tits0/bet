@@ -11,7 +11,7 @@ m_stCreateSchemeOptSumm(m_sql)
        opt_name_11 , opt_name_12, opt_name_13, opt_name_14, opt_name_15, opt_name_16, opt_name_17,  opt_name_18,  opt_name_19, opt_name_20) \
        values ( :schemename, :permission, :createtime, :endtime,  :usercreated, :options, \
        :opt_name_01, :opt_name_02, :opt_name_03, :opt_name_04, :opt_name_05, :opt_name_06, :opt_name_07, :opt_name_08, :opt_name_09, :opt_name_10 , \
-       :opt_name_11, :opt_name_12, :opt_name_13, :opt_name_14, :opt_name_15, :opt_name_16, :opt_name_17,  :opt_name_18, :opt_name_19, :opt_name_20); " , 
+       :opt_name_11, :opt_name_12, :opt_name_13, :opt_name_14, :opt_name_15, :opt_name_16, :opt_name_17,  :opt_name_18, :opt_name_19, :opt_name_20) returning s_id; " , 
         soci::use( m_schemename, "schemename") ,
         soci::use(m_permission, "permission"), 
         soci::use( m_createtime, "createtime" ), 
@@ -37,7 +37,8 @@ m_stCreateSchemeOptSumm(m_sql)
         soci::use(m_opt_name[16], m_ind[16], "opt_name_17"),
         soci::use(m_opt_name[17], m_ind[17], "opt_name_18"),
         soci::use(m_opt_name[18], m_ind[18], "opt_name_19"),
-        soci::use(m_opt_name[19], m_ind[19], "opt_name_20"));
+        soci::use(m_opt_name[19], m_ind[19], "opt_name_20"),
+        soci::into(m_sid) );
 
         m_stCreateSchemeOptSumm = (m_sql.prepare << "insert into scheme_option_summary( s_id, no_of_opts, \
         seq_01, seq_02, seq_03, \
@@ -56,8 +57,8 @@ m_stCreateSchemeOptSumm(m_sql)
        :placed_opt_01, :placed_opt_02, :placed_opt_03, :placed_opt_04, :placed_opt_05, \
        :placed_opt_06, :placed_opt_07, :placed_opt_08, :placed_opt_09, :placed_opt_10, \
        :placed_opt_11, :placed_opt_12, :placed_opt_13, :placed_opt_14, :placed_opt_15, \
-       :placed_opt_16, :placed_opt_17,  :placed_opt_18, :placed_opt_19, :placed_opt_20 \
-       :total \
+       :placed_opt_16, :placed_opt_17,  :placed_opt_18, :placed_opt_19, :placed_opt_20, \
+       :mtotal \
        ); " , 
         soci::use(m_sid, "sid"),
         soci::use(m_optseq, "options"),
@@ -101,8 +102,7 @@ m_stCreateSchemeOptSumm(m_sql)
         soci::use(m_placed_opt[17], m_ind[17], "placed_opt_18"),
         soci::use(m_placed_opt[18], m_ind[18], "placed_opt_19"),
         soci::use(m_placed_opt[19], m_ind[19], "placed_opt_20"),
-        soci::use(m_total, "total")
-        );
+        soci::use(m_total, "mtotal") );
 
         
     }
@@ -113,7 +113,7 @@ m_stCreateSchemeOptSumm(m_sql)
     }
 }
 
-void SCreateScheme::createRow(
+int64_t  SCreateScheme::createRow(
         const std::string& schemename,
         int64_t permission,
         std::tm createtime, 
@@ -130,12 +130,15 @@ void SCreateScheme::createRow(
             m_createtime = createtime;
             m_endtime    = endtime;
             m_usercreated = usercreated;
-            if(options_arr.size()>MAX_OPTS) {
-                options_arr.resize(MAX_OPTS);
+            if(options_arr.size()<MIN_OPTS_BACCT) {
+                return -2;
+            }
+            if(options_arr.size()<2) {
+                options_arr.resize(MAX_OPTS_BACCT);
             }
             OPT_ARRAY::iterator it=options_arr.begin();
             u_int i=0;
-            for(;i<MAX_OPTS;++i) {
+            for(;i<MAX_OPTS_BACCT;++i) {
                 m_opt_name[i]="";
                 m_ind[i] = soci::i_null;
                 m_opt[i]=0;
@@ -151,11 +154,13 @@ void SCreateScheme::createRow(
             m_total=0;
             
             m_stCreateScheme.execute(true);
+            m_stCreateSchemeOptSumm.execute(true);
        }
         catch (std::exception const &e)
         {
             std::cerr << "Error: " << e.what() << '\n';
             throw e; 
         }
+        return m_sid;
 }
 

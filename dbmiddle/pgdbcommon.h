@@ -6,17 +6,14 @@
 #include "soci/core/soci.h"
 #include <fstream>
 #include "json/json.h"
+#include "general_macros.h"
+#include "error_codes.h"
+
 namespace soci{
 class session;
 class statement;
 };
 
-const unsigned int MAX_OPTS=20;
-
-extern const char *UID_TAG ;    
-extern const char *SESSION_TAG ;
-extern const char *SCHEME_TAG ;
-extern const char *OPTIONS_TAG ; 
 
 typedef std::vector< std::string > OPT_ARRAY;
 class SCreateScheme {
@@ -25,24 +22,24 @@ class SCreateScheme {
     std::tm     m_createtime; 
     std::tm     m_endtime ;
     int64_t     m_usercreated;
-    int m_optseq;
+    int         m_optseq;
     //std::string    m_opt_name_01, m_opt_name_02, m_opt_name_03, m_opt_name_04, m_opt_name_05,
     //               m_opt_name_06, m_opt_name_07, m_opt_name_08, m_opt_name_09, m_opt_name_10,
     //               m_opt_name_11, m_opt_name_12, m_opt_name_13, m_opt_name_14, m_opt_name_15, 
     //               m_opt_name_16, m_opt_name_17, m_opt_name_18, m_opt_name_19, m_opt_name_20;
-    std::string   m_opt_name[MAX_OPTS];
-    int64_t     m_opt[MAX_OPTS];
-    int64_t     m_placed_opt[MAX_OPTS];
+    std::string   m_opt_name[MAX_OPTS_BACCT];
+    int64_t     m_opt[MAX_OPTS_BACCT];
+    int64_t     m_placed_opt[MAX_OPTS_BACCT];
     int64_t     m_sid;
     int64_t     m_total;
     soci::session& m_sql;
     soci::statement m_stCreateScheme;
     soci::statement m_stCreateSchemeOptSumm;
-    soci::indicator m_ind[MAX_OPTS];
+    soci::indicator m_ind[MAX_OPTS_BACCT];
 public:
     SCreateScheme(soci::session& sqlsession);
     
-    void createRow(
+    int64_t  createRow(
         const std::string& schemename,
         int64_t permission,
         std::tm createtime, 
@@ -66,7 +63,7 @@ class SCreateBet {
 public:
     SCreateBet(soci::session& sqlsession);
     
-    void createRow( const int64_t schemeid,
+    ERROR_CODES_BACCT  createRow( const int64_t schemeid,
                     const int64_t optid,
                     const int64_t user,
                     const int64_t approvedby,
@@ -151,7 +148,7 @@ public:
     void Prepare();
     void exec(std::string& sql);
 
-    void createScheme(const std::string& schemename,
+    int64_t createScheme(const std::string& schemename,
                     int64_t  permission,
                     std::tm  createtime, 
                     std::tm  endtime,
@@ -162,7 +159,7 @@ public:
     void createSchemeOptions(const int64_t schemename,
                     const std::string&  optname);
 
-    void createBet( const int64_t  schemeid,
+    int createBet( const int64_t  schemeid,
                     const int64_t optid,
                     long        user,
                     long        approvedby,
@@ -194,8 +191,10 @@ public:
 class testpgdbcommon {
 public:
 Json::Value testparseJSON(std::string spjson);
+Json::Value testBetparseJSON(std::string spjson);
 void testCreateInitialScheme();
 void testCreateScheme();
+void testCreateBet() ;
 };
 
 

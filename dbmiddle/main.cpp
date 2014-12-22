@@ -12,10 +12,10 @@ int testdbmain(int argc, char **argv)
 
 int main(int argc, char **argv)
 {
-    testpgdbcommon  test;  
+    testpgdbcommon  test;
     test.testCreateInitialScheme();
     test.testCreateScheme();
-    
+    test.testCreateBet();
 	printf("hello world\n");
 	return 0;
 }
