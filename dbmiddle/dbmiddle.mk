@@ -13,7 +13,7 @@ CurrentFileName        :=
 CurrentFilePath        :=
 CurrentFileFullPath    :=
 User                   :=anandrathi
-Date                   :=12/23/14
+Date                   :=12/29/14
 CodeLitePath           :="/home/anandrathi/.codelite"
 LinkerName             :=/usr/bin/g++ 
 SharedObjectLinkerName :=/usr/bin/g++ -shared -fPIC
@@ -39,8 +39,8 @@ LinkOptions            :=
 IncludePath            :=  $(IncludeSwitch). $(IncludeSwitch). $(IncludeSwitch)./soci/ $(IncludeSwitch)./soci/core/ $(IncludeSwitch)./jsoncpp/include 
 IncludePCH             := 
 RcIncludePath          := 
-Libs                   := $(LibrarySwitch)soci_core $(LibrarySwitch)soci_mysql $(LibrarySwitch)soci_postgresql $(LibrarySwitch)jsoncpp 
-ArLibs                 :=  "soci_core" "soci_mysql" "soci_postgresql" "libjsoncpp.a" 
+Libs                   := $(LibrarySwitch)soci_core $(LibrarySwitch)soci_mysql $(LibrarySwitch)soci_postgresql $(LibrarySwitch)jsoncpp $(LibrarySwitch)boost_date_time 
+ArLibs                 :=  "soci_core" "soci_mysql" "soci_postgresql" "libjsoncpp.a" "boost_date_time" 
 LibPath                := $(LibraryPathSwitch). $(LibraryPathSwitch)./soci/build/lib $(LibraryPathSwitch)./jsoncpp/build/lib 
 
 ##
@@ -61,7 +61,8 @@ AS       := /usr/bin/as
 ##
 CodeLiteDir:=/usr/share/codelite
 LD_LIBRARY_PATH:=./soci/build/lib;../soci/build/lib
-Objects0=$(IntermediateDirectory)/main.cpp$(ObjectSuffix) $(IntermediateDirectory)/pgdbcommon.cpp$(ObjectSuffix) $(IntermediateDirectory)/SCreateScheme.cpp$(ObjectSuffix) $(IntermediateDirectory)/SCreateBet.cpp$(ObjectSuffix) $(IntermediateDirectory)/SFinalizeScheme.cpp$(ObjectSuffix) $(IntermediateDirectory)/SUser.cpp$(ObjectSuffix) $(IntermediateDirectory)/error_codes.cpp$(ObjectSuffix) $(IntermediateDirectory)/UnitTest.cpp$(ObjectSuffix) $(IntermediateDirectory)/LocalCaches.cpp$(ObjectSuffix) 
+Objects0=$(IntermediateDirectory)/main.cpp$(ObjectSuffix) $(IntermediateDirectory)/pgdbcommon.cpp$(ObjectSuffix) $(IntermediateDirectory)/SCreateScheme.cpp$(ObjectSuffix) $(IntermediateDirectory)/SCreateBet.cpp$(ObjectSuffix) $(IntermediateDirectory)/SFinalizeScheme.cpp$(ObjectSuffix) $(IntermediateDirectory)/SUser.cpp$(ObjectSuffix) $(IntermediateDirectory)/error_codes.cpp$(ObjectSuffix) $(IntermediateDirectory)/UnitTest.cpp$(ObjectSuffix) $(IntermediateDirectory)/LocalCaches.cpp$(ObjectSuffix) $(IntermediateDirectory)/SGetSchemeNOptions.cpp$(ObjectSuffix) \
+	
 
 
 
@@ -159,6 +160,14 @@ $(IntermediateDirectory)/LocalCaches.cpp$(DependSuffix): LocalCaches.cpp
 
 $(IntermediateDirectory)/LocalCaches.cpp$(PreprocessSuffix): LocalCaches.cpp
 	@$(CXX) $(CXXFLAGS) $(IncludePCH) $(IncludePath) $(PreprocessOnlySwitch) $(OutputSwitch) $(IntermediateDirectory)/LocalCaches.cpp$(PreprocessSuffix) "LocalCaches.cpp"
+
+$(IntermediateDirectory)/SGetSchemeNOptions.cpp$(ObjectSuffix): SGetSchemeNOptions.cpp $(IntermediateDirectory)/SGetSchemeNOptions.cpp$(DependSuffix)
+	$(CXX) $(IncludePCH) $(SourceSwitch) "/home/anandrathi/sre/baccount/dbmiddle/SGetSchemeNOptions.cpp" $(CXXFLAGS) $(ObjectSwitch)$(IntermediateDirectory)/SGetSchemeNOptions.cpp$(ObjectSuffix) $(IncludePath)
+$(IntermediateDirectory)/SGetSchemeNOptions.cpp$(DependSuffix): SGetSchemeNOptions.cpp
+	@$(CXX) $(CXXFLAGS) $(IncludePCH) $(IncludePath) -MG -MP -MT$(IntermediateDirectory)/SGetSchemeNOptions.cpp$(ObjectSuffix) -MF$(IntermediateDirectory)/SGetSchemeNOptions.cpp$(DependSuffix) -MM "SGetSchemeNOptions.cpp"
+
+$(IntermediateDirectory)/SGetSchemeNOptions.cpp$(PreprocessSuffix): SGetSchemeNOptions.cpp
+	@$(CXX) $(CXXFLAGS) $(IncludePCH) $(IncludePath) $(PreprocessOnlySwitch) $(OutputSwitch) $(IntermediateDirectory)/SGetSchemeNOptions.cpp$(PreprocessSuffix) "SGetSchemeNOptions.cpp"
 
 
 -include $(IntermediateDirectory)/*$(DependSuffix)

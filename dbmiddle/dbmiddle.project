@@ -42,6 +42,7 @@
     <File Name="UnitTest.cpp"/>
     <File Name="LocalCaches.h"/>
     <File Name="LocalCaches.cpp"/>
+    <File Name="SGetSchemeNOptions.cpp"/>
   </VirtualDirectory>
   <VirtualDirectory Name="doc"/>
   <Settings Type="Executable">
@@ -68,6 +69,7 @@
         <Library Value="soci_mysql"/>
         <Library Value="soci_postgresql"/>
         <Library Value="libjsoncpp.a"/>
+        <Library Value="boost_date_time"/>
       </Linker>
       <ResourceCompiler Options="" Required="no"/>
       <General OutputFile="$(IntermediateDirectory)/$(ProjectName)" IntermediateDirectory="./Debug" Command="./$(ProjectName)" CommandArguments="" UseSeparateDebugArgs="no" DebugArguments="" WorkingDirectory="$(IntermediateDirectory)" PauseExecWhenProcTerminates="yes" IsGUIProgram="no" IsEnabled="yes"/>

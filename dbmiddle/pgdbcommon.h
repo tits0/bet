@@ -8,6 +8,7 @@
 #include "json/json.h"
 #include "general_macros.h"
 #include "error_codes.h"
+#include "LocalCaches.h"
 
 namespace soci{
 class session;
@@ -50,16 +51,27 @@ public:
     
 };
 
-
 class SCreateBet {
     int64_t  m_scheme_id;
-    int64_t  m_opt_id; 
+    int64_t  m_opt_id;
     int64_t  m_userid;
     int64_t  m_approvedby;
     int64_t  m_points;
-    std::tm  m_bettime; 
+    std::tm  m_bettime;
+    int64_t  m_curr_points; soci::indicator m_curr_points_ind;
+    int64_t  m_curr_gain; soci::indicator m_curr_gain_ind;
+    int64_t  m_curr_bonus; soci::indicator m_curr_bonus_ind;
+    int64_t  m_curr_purchase; soci::indicator m_curr_purchase_ind;
+    std::tm  m_curr_lastlogin; soci::indicator m_curr_lastlogin_ind;
     soci::session& m_sql;
     soci::statement m_stCreateBet;
+    soci::statement m_stSelectUPoints;
+
+    boost::shared_ptr<soci::statement> m_stUpdateSumm[MAX_OPTS_BACCT];
+    std::string m_update_scheme_option_summary ;
+    std::string m_update_scheme_option_summary_where ;
+    std::string m_ssql;    
+    char m_seqbuffer[201];
 public:
     SCreateBet(soci::session& sqlsession);
     
@@ -124,6 +136,30 @@ int64_t  createRow(
 };
 
 
+class SGetSchemeNOptions {
+    soci::session& m_sql;
+    soci::statement m_stSelectScheme;
+    soci::indicator m_ind[MAX_OPTS_BACCT];
+    public:
+    std::string m_schemename;
+    int64_t     m_permission;
+    std::tm     m_createtime; 
+    std::tm     m_endtime ;
+    int64_t     m_usercreated;
+    int         m_optseq;
+    std::string   m_opt_name[MAX_OPTS_BACCT];
+    int64_t     m_opt[MAX_OPTS_BACCT];
+    int64_t     m_placed_opt[MAX_OPTS_BACCT];
+    int64_t     m_sid;
+    int64_t     m_total;
+public:
+    SGetSchemeNOptions(soci::session& sqlsession);
+    void test(void) { std::cout << " hello \n";  }
+    int64_t selectRows(LocalCaches::SSCHEME_OPTIONS* schemeOptions);
+    
+};
+
+
 class pgdbcommon
 {
     boost::shared_ptr<soci::session> m_sqlptr;
@@ -132,6 +168,7 @@ class pgdbcommon
     boost::shared_ptr<SCreateBet> m_SCreateBet;
     boost::shared_ptr<SFinalizeScheme> m_SFinalizeScheme;
     boost::shared_ptr<SUser>  m_SUser;
+    boost::shared_ptr<SGetSchemeNOptions> m_SGetSchemeNOptions;
     std::ofstream m_logfile;
     
     static pgdbcommon* s_pgdbcommon;
@@ -186,7 +223,11 @@ public:
                     );
 
 
+    int64_t getFullSchemeOptionNamesID(Json::Value& root);
+
 };
+
+
 
 class testpgdbcommon {
 public:
@@ -195,6 +236,7 @@ Json::Value testBetparseJSON(std::string spjson);
 void testCreateInitialScheme();
 void testCreateScheme();
 void testCreateBet() ;
+void testGetSchemeOptList();
 };
 
 

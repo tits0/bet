@@ -16,6 +16,7 @@ int main(int argc, char **argv)
     test.testCreateInitialScheme();
     test.testCreateScheme();
     test.testCreateBet();
+    test.testGetSchemeOptList();
 	printf("hello world\n");
 	return 0;
 }

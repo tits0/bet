@@ -63,16 +63,22 @@ void pgdbcommon::createInitialScheme()
     soci::session& sql = *m_sqlptr.get();
     try
     {
-      sql << "DROP TABLE  IF EXISTS u_table  CASCADE;";
-      sql << "create table  IF NOT EXISTS  u_table ( u_id bigserial, u_idc varchar, points bigint, gain bigint, name varchar, namev varchar, joindate timestamp, lastlogin timestamp);" ;
-      sql << "DROP TABLE  IF EXISTS scheme  CASCADE;";
+        
+      sql << "DROP TABLE IF EXISTS u_table CASCADE;";
+      sql << "create table IF NOT EXISTS  u_table ( u_id bigserial, u_idc varchar, points bigint, \
+        gain bigint DEFAULT 0, bonus bigint DEFAULT 0, purchase bigint DEFAULT 0, \
+        name varchar, namev varchar, joindate timestamp, lastlogin timestamp);" ;
+        
+      sql << "DROP TABLE IF EXISTS scheme CASCADE;";
       sql << "create table IF NOT EXISTS scheme( s_id bigserial, scheme_name varchar, permission integer, createtime timestamp, endtime timestamp, uid_created bigint, \
-       options integer ,\
+       options integer DEFAULT 0, \
        opt_name_01 varchar, opt_name_02 varchar, opt_name_03 varchar, opt_name_04 varchar, opt_name_05 varchar, opt_name_06 varchar, opt_name_07 varchar,  opt_name_08 varchar,  opt_name_09 varchar,   opt_name_10 varchar, \
-       opt_name_11 varchar, opt_name_12 varchar, opt_name_13 varchar, opt_name_14 varchar, opt_name_15 varchar, opt_name_16 varchar, opt_name_17 varchar,  opt_name_18 varchar,  opt_name_19 varchar,   opt_name_20 varchar );" ;
+       opt_name_11 varchar, opt_name_12 varchar, opt_name_13 varchar, opt_name_14 varchar, opt_name_15 varchar, opt_name_16 varchar, opt_name_17 varchar,  opt_name_18 varchar,  opt_name_19 varchar,   opt_name_20 varchar, \
+       isarchived smallint \
+       );" ;
       
       sql << "DROP TABLE  IF EXISTS schemearchive CASCADE;";
-      sql << "create table IF NOT EXISTS schemearchive( s_id bigint, scheme_name varchar, permission integer, createtime timestamp, endtime timestamp, uid_created bigint, archivetime timestamp );" ;
+      sql << "create table IF NOT EXISTS schemearchive( LIKE scheme );" ;
 
       sql << "DROP TABLE  IF EXISTS scheme_option_summary CASCADE;";
       sql << "create table IF NOT EXISTS scheme_option_summary( s_id bigint, no_of_opts int, \
@@ -87,79 +93,21 @@ void pgdbcommon::createInitialScheme()
                   total numeric);" ;
        //gain_1 = (total-seq1)
        //gain_1 = (total-seq1) opt_id1_1/seq1
- 
+
       sql << "DROP TABLE IF EXISTS u_scheme_option_summary CASCADE;";
-      sql << "create table IF NOT EXISTS u_scheme_option_summary( u_id bigint, s_id bigint, \
-                  sid_1 bigint, opts_1 int,\
-                  opt_id1_1 bigint, opt_id1_2 bigint, opt_id1_3 bigint, \
-                  opt_id1_4 bigint, opt_id1_5 bigint,  \
-                  opt_gain_id1_1 bigint, opt_gain_id1_2 bigint, opt_gain_id1_3 bigint, \
-                  opt_gain_id1_4 bigint, opt_gain_id1_5 bigint,  \
-                  total_1 bigint, total_gain_1 bigint, \
-                  sid_2 bigint, opts_2 int, \
-                  opt_id2_1 bigint, opt_id2_2 bigint, opt_id2_3 bigint, \
-                  opt_id2_4 bigint, opt_id2_5 bigint,  \
-                  opt_gain_id2_1 bigint, opt_gain_id2_2 bigint, opt_gain_id2_3 bigint, \
-                  opt_gain_id2_4 bigint, opt_gain_id2_5 bigint,  \
-                  total_2 bigint, total_gain_2 bigint, \
-                  sid_3 bigint, opts_3 int, \
-                  opt_id3_1 bigint, opt_id3_2 bigint, opt_id3_3 bigint, \
-                  opt_id3_4 bigint, opt_id3_5 bigint,  \
-                  opt_gain_id3_1 bigint, opt_gain_id3_2 bigint, opt_gain_id3_3 bigint, \
-                  opt_gain_id3_4 bigint, opt_gain_id3_5 bigint,  \
-                  total_3 bigint, total_gain_3 bigint, \
-                  sid_4 bigint, opts_4 int, \
-                  opt_id4_1 bigint, opt_id4_2 bigint, opt_id4_3 bigint, \
-                  opt_id4_4 bigint, opt_id4_5 bigint,  \
-                  opt_gain_id4_1 bigint, opt_gain_id4_2 bigint, opt_gain_id4_3 bigint, \
-                  opt_gain_id4_4 bigint, opt_gain_id4_5 bigint,  \
-                  total_4 bigint, total_gain_4 bigint, \
-                  sid_5 bigint, opts_5 int, \
-                  opt_id5_1 bigint, opt_id5_2 bigint, opt_id5_3 bigint, \
-                  opt_id5_4 bigint, opt_id5_5 bigint,  \
-                  opt_gain_id5_1 bigint, opt_gain_id5_2 bigint, opt_gain_id5_3 bigint, \
-                  opt_gain_id5_4 bigint, opt_gain_id5_5 bigint,  \
-                  total_5 bigint , total_gain_5 bigint, \
-                  sid_6 bigint, opts_6 int, \
-                  opt_id6_1 bigint, opt_id6_2 bigint, opt_id6_3 bigint, \
-                  opt_id6_4 bigint, opt_id6_5 bigint,  \
-                  opt_gain_id6_1 bigint, opt_gain_id6_2 bigint, opt_gain_id6_3 bigint, \
-                  opt_gain_id6_4 bigint, opt_gain_id6_5 bigint,  \
-                  total_6 bigint, total_gain_6 bigint, \
-                  sid_7 bigint, opts_7 int, \
-                  opt_id7_1 bigint, opt_id7_2 bigint, opt_id7_3 bigint, \
-                  opt_id7_4 bigint, opt_id7_5 bigint,  \
-                  opt_gain_id7_1 bigint, opt_gain_id7_2 bigint, opt_gain_id7_3 bigint, \
-                  opt_gain_id7_4 bigint, opt_gain_id7_5 bigint,  \
-                  total_7 bigint, total_gain_7 bigint, \
-                  sid_8 bigint, opts_8 int, \
-                  opt_id8_1 bigint, opt_id8_2 bigint, opt_id8_3 bigint, \
-                  opt_id8_4 bigint, opt_id8_5 bigint,  \
-                  opt_gain_id8_1 bigint, opt_gain_id8_2 bigint, opt_gain_id8_3 bigint, \
-                  opt_gain_id8_4 bigint, opt_gain_id8_5 bigint,  \
-                  total_8 bigint, total_gain_8 bigint, \
-                  sid_9 bigint, opts_9 int, \
-                  opt_id9_1 bigint, opt_id9_2 bigint, opt_id9_3 bigint, \
-                  opt_id9_4 bigint, opt_id9_5 bigint,   \
-                  opt_gain_id9_1 bigint, opt_gain_id9_2 bigint, opt_gain_id9_3 bigint, \
-                  opt_gain_id9_4 bigint, opt_gain_id9_5 bigint,  \
-                  total_9 bigint, total_gain_9 bigint, \
-                  sid_10 bigint, opts_10 int, \
-                  opt_id10_1 bigint, opt_id10_2 bigint, opt_id10_3 bigint, \
-                  opt_id10_4 bigint, opt_id10_5 bigint, \
-                  opt_gain_id10_1 bigint, opt_gain_id10_2 bigint, opt_gain_id10_3 bigint, \
-                  opt_gain_id10_4 bigint, opt_gain_id10_5 bigint,  \
-                  total_10 bigint, total_gain_10 bigint, \
-                  total numeric);" ;
-
-
+      
       sql << "DROP TABLE IF EXISTS bet CASCADE;";
-      sql << "create table  IF NOT EXISTS bet( s_id bigint, opt_id bigint, u_id bigint,  points bigint,\
+      sql << "create table IF NOT EXISTS bet( s_id bigint, opt_id bigint, u_id bigint,  points bigint,\
         bettime timestamp );" ;
+
+      sql << "DROP TABLE IF EXISTS bonus CASCADE;";
+      sql << "create table IF NOT EXISTS bonus( u_id bigint,  points bigint,\
+        btime timestamp );" ;
+        
         
       sql << "DROP TABLE IF EXISTS bet_archive CASCADE;";
-      sql << "create table IF NOT EXISTS  bet_archive( s_id bigint, opt_id bigint, u_id bigint, points bigint,\
-        bettime timestamp, archivetime timestamp );" ;
+      sql << "create table IF NOT EXISTS  bet_archive( LIKE scheme );" ;
+       
 
       sql << "DROP TABLE IF EXISTS finalizebet CASCADE;";
       sql << "create table IF NOT EXISTS finalizebet( s_id bigint, \
@@ -171,6 +119,7 @@ void pgdbcommon::createInitialScheme()
       m_SCreateBet.reset( new SCreateBet(*m_sqlptr.get() ) );
       m_SFinalizeScheme.reset(new SFinalizeScheme(*m_sqlptr.get()) ); 
       m_SUser.reset( new SUser(*m_sqlptr.get()) );
+      m_SGetSchemeNOptions.reset( new SGetSchemeNOptions(*m_sqlptr.get()) );
       
     }
     catch (std::exception const &e)
@@ -278,7 +227,6 @@ int64_t  pgdbcommon::createuser(
                     const std::tm      jointime,
                     const std::tm      lastlogintime
                     )
-
 {
     try
     {
@@ -301,4 +249,22 @@ int64_t  pgdbcommon::createuser(
     return m_SUser->getUID();
 }
 
+int64_t pgdbcommon::getFullSchemeOptionNamesID(Json::Value& root) {
 
+   int ret=ERROR_OTHER;
+   try
+    {
+        LocalCaches::SSCHEME_OPTIONS schemeOptions;
+        m_SGetSchemeNOptions->test();
+        m_SGetSchemeNOptions->selectRows(&schemeOptions);
+        LocalCaches *pCache =LocalCaches::Instance();
+        pCache->setFullSchemeOptionNamesIDMap(schemeOptions);   
+        pCache->getFullSchemeOptionNamesID(root);
+    }
+    catch (std::exception const &e)
+    {
+        std::cerr << "Error: " << e.what() << '\n';
+        throw e; 
+    }
+    return ret;
+}
