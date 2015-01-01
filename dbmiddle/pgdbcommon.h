@@ -216,10 +216,10 @@ public:
                     const std::string&  username,
                     const std::string&  address,
                     const std::string&  pass,
-                    const int64_t      points,
-                    const int64_t      gain,
-                    const std::tm      jointime,
-                    const std::tm      lastlogintime
+                    int64_t      points,
+                    int64_t      gain,
+                    std::tm      jointime,
+                    std::tm      lastlogintime
                     );
 
 

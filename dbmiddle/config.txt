@@ -1,0 +1,4 @@
+{
+"join_bonus":1000,
+"log_bonus":50
+}

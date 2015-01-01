@@ -13,7 +13,7 @@ CurrentFileName        :=
 CurrentFilePath        :=
 CurrentFileFullPath    :=
 User                   :=anandrathi
-Date                   :=12/29/14
+Date                   :=01/02/15
 CodeLitePath           :="/home/anandrathi/.codelite"
 LinkerName             :=/usr/bin/g++ 
 SharedObjectLinkerName :=/usr/bin/g++ -shared -fPIC
@@ -62,7 +62,7 @@ AS       := /usr/bin/as
 CodeLiteDir:=/usr/share/codelite
 LD_LIBRARY_PATH:=./soci/build/lib;../soci/build/lib
 Objects0=$(IntermediateDirectory)/main.cpp$(ObjectSuffix) $(IntermediateDirectory)/pgdbcommon.cpp$(ObjectSuffix) $(IntermediateDirectory)/SCreateScheme.cpp$(ObjectSuffix) $(IntermediateDirectory)/SCreateBet.cpp$(ObjectSuffix) $(IntermediateDirectory)/SFinalizeScheme.cpp$(ObjectSuffix) $(IntermediateDirectory)/SUser.cpp$(ObjectSuffix) $(IntermediateDirectory)/error_codes.cpp$(ObjectSuffix) $(IntermediateDirectory)/UnitTest.cpp$(ObjectSuffix) $(IntermediateDirectory)/LocalCaches.cpp$(ObjectSuffix) $(IntermediateDirectory)/SGetSchemeNOptions.cpp$(ObjectSuffix) \
-	
+	$(IntermediateDirectory)/ConfigLocal.cpp$(ObjectSuffix) 
 
 
 
@@ -168,6 +168,14 @@ $(IntermediateDirectory)/SGetSchemeNOptions.cpp$(DependSuffix): SGetSchemeNOptio
 
 $(IntermediateDirectory)/SGetSchemeNOptions.cpp$(PreprocessSuffix): SGetSchemeNOptions.cpp
 	@$(CXX) $(CXXFLAGS) $(IncludePCH) $(IncludePath) $(PreprocessOnlySwitch) $(OutputSwitch) $(IntermediateDirectory)/SGetSchemeNOptions.cpp$(PreprocessSuffix) "SGetSchemeNOptions.cpp"
+
+$(IntermediateDirectory)/ConfigLocal.cpp$(ObjectSuffix): ConfigLocal.cpp $(IntermediateDirectory)/ConfigLocal.cpp$(DependSuffix)
+	$(CXX) $(IncludePCH) $(SourceSwitch) "/home/anandrathi/sre/baccount/dbmiddle/ConfigLocal.cpp" $(CXXFLAGS) $(ObjectSwitch)$(IntermediateDirectory)/ConfigLocal.cpp$(ObjectSuffix) $(IncludePath)
+$(IntermediateDirectory)/ConfigLocal.cpp$(DependSuffix): ConfigLocal.cpp
+	@$(CXX) $(CXXFLAGS) $(IncludePCH) $(IncludePath) -MG -MP -MT$(IntermediateDirectory)/ConfigLocal.cpp$(ObjectSuffix) -MF$(IntermediateDirectory)/ConfigLocal.cpp$(DependSuffix) -MM "ConfigLocal.cpp"
+
+$(IntermediateDirectory)/ConfigLocal.cpp$(PreprocessSuffix): ConfigLocal.cpp
+	@$(CXX) $(CXXFLAGS) $(IncludePCH) $(IncludePath) $(PreprocessOnlySwitch) $(OutputSwitch) $(IntermediateDirectory)/ConfigLocal.cpp$(PreprocessSuffix) "ConfigLocal.cpp"
 
 
 -include $(IntermediateDirectory)/*$(DependSuffix)

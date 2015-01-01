@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include "pgdbcommon.h"
+#include "ConfigLocal.h"
 
 int testdbmain(int argc, char **argv)
 {
@@ -12,6 +13,7 @@ int testdbmain(int argc, char **argv)
 
 int main(int argc, char **argv)
 {
+    ConfigLocal::Instance()->readConfigFile();
     testpgdbcommon  test;
     test.testCreateInitialScheme();
     test.testCreateScheme();

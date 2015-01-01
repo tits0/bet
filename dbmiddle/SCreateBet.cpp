@@ -8,11 +8,11 @@ SCreateBet::SCreateBet(soci::session& sqlsession):m_sql(sqlsession), m_stCreateB
 
         m_stSelectUPoints = (m_sql.prepare << "select points, gain, bonus, purchase, lastlogin from u_table where u_id = :uid; ", 
         soci::into(m_curr_points, m_curr_points_ind),
-        soci::into( m_curr_gain, m_curr_gain),
-        soci::into(m_curr_bonus, m_curr_bonus ), 
-        soci::into( m_curr_purchase, m_curr_purchase), 
-        soci::into( m_curr_lastlogin, m_curr_lastlogin ),
-        soci::use(m_userid, "userid") );
+        soci::into( m_curr_gain, m_curr_gain_ind),
+        soci::into(m_curr_bonus, m_curr_bonus_ind ), 
+        soci::into( m_curr_purchase, m_curr_purchase_ind), 
+        soci::into( m_curr_lastlogin, m_curr_lastlogin_ind ),
+        soci::use(m_userid, "uid") );
 
                    
       //Update scheme_option_summary  according to the option selected.
@@ -72,20 +72,19 @@ SCreateBet::SCreateBet(soci::session& sqlsession):m_sql(sqlsession), m_stCreateB
         std::cerr << "Error: " << e.what() << '\n';
         throw e; 
     }
-        
+
 }    
 
 ERROR_CODES_BACCT SCreateBet::createRow( const int64_t schemeid,
-        const int64_t optid,
-        const int64_t user,
-        const int64_t approvedby,
-        const int64_t points,
-        std::tm     bettime )
+    const int64_t optid,
+    const int64_t user,
+    const int64_t approvedby,
+    const int64_t points,
+    std::tm     bettime )
 {
     
     try
     {
-
         m_scheme_id = schemeid;
         m_opt_id = optid;
         m_userid = user;
@@ -96,16 +95,23 @@ ERROR_CODES_BACCT SCreateBet::createRow( const int64_t schemeid,
         m_stSelectUPoints.execute(false);
         if(m_stSelectUPoints.fetch())
         {
-            
-            if(m_curr_points)
-                return ERROR_NOT_ENOUGH_POINTS;
-            m_curr_gain;
-            m_curr_bonus;
-            m_curr_purchase;
-            m_curr_lastlogin;
-
-        }  
-
+           if (m_stSelectUPoints.got_data()) {
+                
+            if(soci::i_ok == m_curr_points_ind) {
+                if(m_points > m_curr_points) {
+                    return ERROR_NOT_ENOUGH_POINTS;
+                }
+             } else {
+                return ERROR_QUERY_FAILED;
+            }
+            } else {
+                return ERROR_QUERY_FAILED;
+            }
+               
+       } else {
+            return ERROR_QUERY_FAILED;
+       }
+ 
         
         //check correctness of option id
         if(m_opt_id>MAX_OPTS_BACCT || m_opt_id< 1) {

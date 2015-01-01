@@ -2,6 +2,7 @@
 #include "soci/backends/postgresql/soci-postgresql.h"
 #include "general_macros.h"
 #include "error_codes.h"
+#include "ConfigLocal.h"
 
 
    
@@ -222,16 +223,18 @@ int64_t  pgdbcommon::createuser(
                     const std::string&  username,
                     const std::string&  address,
                     const std::string&  pass,
-                    const int64_t      points,
-                    const int64_t      gain,
-                    const std::tm      jointime,
-                    const std::tm      lastlogintime
+                    int64_t      points,
+                    int64_t      gain,
+                    std::tm      jointime,
+                    std::tm      lastlogintime
                     )
 {
     try
     {
         
-       m_SUser->createRow( 
+    points = ConfigLocal::Instance()->m_joinBonus;
+    gain=0;
+    m_SUser->createRow(
                     username,
                     address,
                     pass,

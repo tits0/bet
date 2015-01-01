@@ -5,6 +5,9 @@ SUser::SUser(soci::session& sqlsession):m_sql(sqlsession), m_stSUser(sqlsession)
 
     try
     {
+        
+        
+        
     m_stSUser =  (m_sql.prepare <<
     "insert into u_table( u_idc, points, gain, name, namev, joindate, lastlogin ) \
        values ( :address, :points, :gain, :username, :pass, :jointime, :lastlogintime) \
