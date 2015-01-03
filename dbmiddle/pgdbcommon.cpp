@@ -113,8 +113,8 @@ ERROR_CODES_BACCT pgdbcommon::createInitialScheme()
 
       sql << "DROP TABLE IF EXISTS finalizebet CASCADE;";
       sql << "create table IF NOT EXISTS finalizebet( s_id bigint NOT NULL, \
-      opt_won bigint NOT NULL, opt_of_user bigint NOT NULL, u_id bigint NOT NULL, \
-      points_invested bigint NOT NULL, gain bigint NOT NULL, finalizetime timestamp NOT NULL);" ;
+      opt_won bigint NOT NULL, \
+      finalizetime timestamp NOT NULL);" ;
       
       m_SCreateScheme.reset( new SCreateScheme(*m_sqlptr.get() ) );
       
@@ -201,30 +201,22 @@ ERROR_CODES_BACCT pgdbcommon::createBet(
 ERROR_CODES_BACCT pgdbcommon::finalizeBet(
         const int64_t scheme_id,
         const int64_t optionwon,
-        const int64_t optionofuser,
-        const int64_t user,
-        const int64_t pointsinvested,
-        const int64_t gain,
         std::tm       finalizetime
         )
 {
     ERROR_CODES_BACCT ret=ERROR_OTHER;
     try
     {
-        m_SFinalizeScheme->createRow(scheme_id, 
+        ret=m_SFinalizeScheme->createRow(scheme_id, 
                 optionwon,
-                optionofuser,
-                user,
-                pointsinvested,
-                gain,
                 finalizetime);
+        
     }
     catch (std::exception const &e)
     {
         std::cerr << "Error: " << e.what() << '\n';
-        ret=ERROR_OTHER; 
+        ret=ERROR_FINALIZE_FAILED; 
     }
-    ret=ERROR_OK;
     return ret;
 }
 
@@ -254,7 +246,6 @@ ERROR_CODES_BACCT  pgdbcommon::createuser(
                     jointime,
                     lastlogintime,
                     uid);
-        
     }
     catch (std::exception const &e)
     {

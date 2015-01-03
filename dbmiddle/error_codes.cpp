@@ -17,7 +17,7 @@ const char*  map_error(ERROR_CODES_BACCT err)
       case ERROR_SCHEME_CREATION_FAILED:   return "scheme creation failed";
       case ERROR_MIN_OPTS_FOR_SCHEME:   return "insufficient options for scheme min is two";
       case ERROR_USER_CREATION_FAILED:   return "insufficient options for scheme min is two";
-
+      case ERROR_FINALIZE_FAILED:   return "finalize failed";
       default:
          break;
    }

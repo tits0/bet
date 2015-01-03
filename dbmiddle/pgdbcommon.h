@@ -89,10 +89,6 @@ public:
 class SFinalizeScheme {
     int64_t  m_scheme_id;
     int64_t  m_optionwon;
-    int64_t  m_optionofuser;
-    int64_t  m_userid;
-    int64_t  m_pointsinvested;
-    int64_t  m_gain;
     std::tm        m_finalizetime;
 
     soci::session&  m_sql;
@@ -100,12 +96,8 @@ class SFinalizeScheme {
 public:
     SFinalizeScheme(soci::session& sqlsession);
     
-    void createRow( const int64_t schemename,
+    ERROR_CODES_BACCT createRow( const int64_t schemename,
                     const int64_t optionwon,
-                    const int64_t optionofuser,
-                    const int64_t user,
-                    const int64_t pointsinvested,
-                    const int64_t gain,
                     std::tm       finalizetime);
     
 };
@@ -234,11 +226,7 @@ public:
 
     ERROR_CODES_BACCT finalizeBet(const int64_t scheme_id,
                     const int64_t optionwon,
-                    const int64_t optionofuser,
-                    const int64_t user,
-                    const int64_t pointsinvested,
-                    const int64_t gain,
-                    std::tm       finalizetime);
+                    std::tm   finalizetime);
 
     ERROR_CODES_BACCT  createuser(
                     const std::string&  username,

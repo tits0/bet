@@ -9,10 +9,9 @@ const char* sjson_20="{\"uid\":12345567, \"session\":\"7654321\" , \"scheme\":\"
  \"opt6\", \"opt7\", \"opt8\", \"opt9\", \"opt10\", \"opt11\", \"opt12\", \"opt13\", \"opt14\", \"opt15\", \"opt16\", \"opt17\", \"opt18\", \"opt19\", \
  \"opt20\"] }";
 
-const char* sjson_22="{\"uid\":12345567, \"session\":\"7654321\" , \"scheme\":\"s5\", \"options\":[\"opt1\", \"opt2\", \"opt3\", \"opt4\", \"opt5\", \
+const char* sjson_22="{\"uid\":12345567, \"session\":\"7654321\", \"scheme\":\"s5\", \"options\":[\"opt1\", \"opt2\", \"opt3\", \"opt4\", \"opt5\", \
  \"opt6\", \"opt7\", \"opt8\", \"opt9\", \"opt10\", \"opt11\", \"opt12\", \"opt13\", \"opt14\", \"opt15\", \"opt16\", \"opt17\", \"opt18\", \"opt19\", \
  \"opt20\", \"opt21\", \"opt22\"] }";
-
 
 const char* sjson_bet_100="{\"uid\":1, \"session\":\"7654321\" , \"schid\":1 , \"optid\":1, \"betpt\":100 }";
 const char* sjson_bet_100_2="{\"uid\":2, \"session\":\"7654322\" , \"schid\":1 , \"optid\":2, \"betpt\":100 }";
@@ -21,6 +20,7 @@ const char* sjson_user_1="{\"uname\":\"a1\", \"addr\":\"a@a.com\" , \"pss\":\"pa
 const char* sjson_user_2="{\"uname\":\"b2\", \"addr\":\"b@b.com\" , \"pss\":\"pa2\" }";
 const char* sjson_user_3="{\"uname\":\"c3\", \"addr\":\"c@c.com\" , \"pss\":\"pa3\" }";
 
+const char* sjson_finalize_1="{\"schid\":\"1\", \"optid\":1 }";
 
 Json::Value testpgdbcommon::testparseJSON(std::string spjson) {
     Json::Reader reader;
@@ -237,60 +237,6 @@ ERROR_CODES_BACCT testpgdbcommon::testGetSchemeOptList() {
 }
 
 
-ERROR_CODES_BACCT testpgdbcommon::testFinalizeUser() {
-    pgdbcommon* pPgdbcommon = pgdbcommon::GetInstance();
- 
-    boost::posix_time::ptime createdTime = boost::posix_time::second_clock::universal_time();
-    std::cout << "createdTime:" << createdTime << std::endl;
-    boost::posix_time::ptime endtimecal(createdTime);
-    std::cout << "endtimecal date:" << endtimecal << std::endl;
-    endtimecal = endtimecal +  boost::gregorian::days(0) + boost::posix_time::hours(1);
-    std::cout << "endtimecal date+hour:" << endtimecal << std::endl;
-
-    std::cout << "endtimecal:" << endtimecal << std::endl;
-    
-    Json::Value optdata ;
-    ERROR_CODES_BACCT ret = ERROR_OTHER;
-    {
-        optdata = this->testparseJSON(sjson_finalize_1);
-
-        Json::Value unameVal = optdata[OPTIONS_UNAME_BACCT];
-        Json::Value passVal = optdata[OPTIONS_PASS_BACCT]; 
-        Json::Value addrVal = optdata[OPTIONS_ADDR_BACCT]; 
-        
-        std::string username=unameVal.asCString();
-        std::string pass=passVal.asCString();
-        std::string address= addrVal.asCString();
-        std::tm jointime= boost::posix_time::to_tm(endtimecal);
-        std::tm lastlogintime= boost::posix_time::to_tm(endtimecal);
-
-        int64_t scheme_id,
-        int64_t optionwon,
-        int64_t optionofuser,
-        int64_t user,
-        int64_t pointsinvested,
-        int64_t gain,
-        std::tm       finalizetime
-
-        
-        Json::Value retroot;
-        ret = pPgdbcommon->finalizeBet(
-        const int64_t scheme_id,
-        const int64_t optionwon,
-        const int64_t optionofuser,
-        const int64_t user,
-        const int64_t pointsinvested,
-        const int64_t gain,
-        std::tm       finalizetime
-        );
-                        
-
-        retroot[UID_TAG_BACCT] = (Json::Int64)uid;
-        std::cout << "User ID: " << uid;
-    }
-    return ret ;
-}
-
 
 ERROR_CODES_BACCT testpgdbcommon::testCreateUser() {
     pgdbcommon* pPgdbcommon = pgdbcommon::GetInstance();
@@ -402,3 +348,39 @@ ERROR_CODES_BACCT testpgdbcommon::testCreateUser() {
     return ret ;
 }
 
+
+
+ERROR_CODES_BACCT testpgdbcommon::testFinalizeUser() {
+    pgdbcommon* pPgdbcommon = pgdbcommon::GetInstance();
+ 
+    boost::posix_time::ptime createdTime = boost::posix_time::second_clock::universal_time();
+    std::cout << "createdTime:" << createdTime << std::endl;
+    boost::posix_time::ptime endtimecal(createdTime);
+    std::cout << "endtimecal date:" << endtimecal << std::endl;
+    endtimecal = endtimecal +  boost::gregorian::days(0) + boost::posix_time::hours(1);
+    std::cout << "endtimecal date+hour:" << endtimecal << std::endl;
+
+    std::cout << "endtimecal:" << endtimecal << std::endl;
+    
+    Json::Value optdata ;
+    ERROR_CODES_BACCT ret = ERROR_OTHER;
+    {
+        optdata = this->testparseJSON(sjson_finalize_1);
+
+        Json::Value schidVal = optdata[SCHEME_ID_TAG_BACCT];
+        Json::Value optVal = optdata[OPTION_ID_TAG_BACCT]; 
+
+        int64_t scheme_id = schidVal.asInt64();
+        int64_t optionwon = optVal.asInt64();
+        std::tm finalizetime= boost::posix_time::to_tm(endtimecal);
+
+        
+        Json::Value retroot;
+        ret = pPgdbcommon->finalizeBet(
+        scheme_id,
+        optionwon,
+        finalizetime
+        );
+    }
+    return ret ;
+}
