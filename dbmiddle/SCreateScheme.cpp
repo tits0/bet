@@ -113,17 +113,20 @@ m_stCreateSchemeOptSumm(m_sql)
     }
 }
 
-int64_t  SCreateScheme::createRow(
+ERROR_CODES_BACCT  SCreateScheme::createRow(
         const std::string& schemename,
         int64_t permission,
         std::tm createtime, 
         std::tm endtime,
         int64_t usercreated, 
-        OPT_ARRAY& options_arr
+        OPT_ARRAY& options_arr,
+        int64_t& sid
     )
 {
+    ERROR_CODES_BACCT ret=ERROR_CODES_BACCT::ERROR_OK;
     //createtime.tm_isdst=0;
     //endtime.tm_isdst=0;
+    //
        try{
             m_schemename = schemename;
             m_permission = permission;
@@ -131,10 +134,7 @@ int64_t  SCreateScheme::createRow(
             m_endtime    = endtime;
             m_usercreated = usercreated;
             if(options_arr.size()<MIN_OPTS_BACCT) {
-                return -2;
-            }
-            if(options_arr.size()<2) {
-                options_arr.resize(MAX_OPTS_BACCT);
+                return ERROR_MIN_OPTS_FOR_SCHEME;
             }
             OPT_ARRAY::iterator it=options_arr.begin();
             u_int i=0;
@@ -159,8 +159,9 @@ int64_t  SCreateScheme::createRow(
         catch (std::exception const &e)
         {
             std::cerr << "Error: " << e.what() << '\n';
-            throw e; 
+            ret=ERROR_CODES_BACCT::ERROR_SCHEME_CREATION_FAILED; 
         }
-        return m_sid;
+        sid=m_sid;
+        return ret;
 }
 

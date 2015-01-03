@@ -40,13 +40,14 @@ class SCreateScheme {
 public:
     SCreateScheme(soci::session& sqlsession);
     
-    int64_t  createRow(
+    ERROR_CODES_BACCT createRow(
         const std::string& schemename,
         int64_t permission,
         std::tm createtime, 
         std::tm endtime,
         int64_t usercreated, 
-        OPT_ARRAY& options_arr
+        OPT_ARRAY& options_arr,
+        int64_t& sid
         );
     
 };
@@ -66,7 +67,8 @@ class SCreateBet {
     soci::session& m_sql;
     soci::statement m_stCreateBet;
     soci::statement m_stSelectUPoints;
-
+    soci::statement m_stUpdateUPoints;
+ 
     boost::shared_ptr<soci::statement> m_stUpdateSumm[MAX_OPTS_BACCT];
     std::string m_update_scheme_option_summary ;
     std::string m_update_scheme_option_summary_where ;
@@ -118,21 +120,44 @@ class SUser {
     std::tm      m_jointime;
     std::tm      m_lastlogintime;
 
+
+    int64_t  m_userid;
+    int64_t  m_curr_points; soci::indicator m_curr_points_ind;
+    int64_t  m_curr_gain; soci::indicator m_curr_gain_ind;
+    int64_t  m_curr_bonus; soci::indicator m_curr_bonus_ind;
+    int64_t  m_curr_purchase; soci::indicator m_curr_purchase_ind;
+    std::tm  m_curr_lastlogin; soci::indicator m_curr_lastlogin_ind;
+
     soci::session&  m_sql;
     soci::statement m_stSUser;
+    soci::statement m_stSelectUPoints;
+    
 public:
     SUser(soci::session& sqlsession);
 
+
 inline int64_t  getUID() { return m_uid;}
-int64_t  createRow(  
+ERROR_CODES_BACCT  getPoints(  
+                    int64_t&  purchase,
+                    int64_t&  bonus,
+                    int64_t&  points,
+                    int64_t&  gain,
+                    std::tm&  lastlogintime,
+                    const int64_t uid
+                    );
+
+
+ERROR_CODES_BACCT  createRow(  
                     const std::string&  username,
                     const std::string&  address,
                     const std::string&  pass,
                     const int64_t       points,
                     const int64_t       gain,
                     const std::tm      jointime,
-                    const std::tm      lastlogintime
+                    const std::tm      lastlogintime,
+                    int64_t & uid
                     );
+
 };
 
 
@@ -181,22 +206,25 @@ public:
     ~pgdbcommon();
     static pgdbcommon* GetInstance();
     
-    void createInitialScheme();
+    ERROR_CODES_BACCT createInitialScheme();
     void Prepare();
     void exec(std::string& sql);
 
-    int64_t createScheme(const std::string& schemename,
+    
+
+    ERROR_CODES_BACCT createScheme(const std::string& schemename,
                     int64_t  permission,
                     std::tm  createtime, 
                     std::tm  endtime,
                     int64_t  usercreated,
-                    const Json::Value& opt_array
+                    const Json::Value& opt_array,
+                    int64_t&  sid
                     );
 
-    void createSchemeOptions(const int64_t schemename,
+    ERROR_CODES_BACCT createSchemeOptions(const int64_t schemename,
                     const std::string&  optname);
 
-    int createBet( const int64_t  schemeid,
+    ERROR_CODES_BACCT createBet( const int64_t  schemeid,
                     const int64_t optid,
                     long        user,
                     long        approvedby,
@@ -204,7 +232,7 @@ public:
                     std::tm     bettime );
 
 
-    void finalizeBet(const int64_t scheme_id,
+    ERROR_CODES_BACCT finalizeBet(const int64_t scheme_id,
                     const int64_t optionwon,
                     const int64_t optionofuser,
                     const int64_t user,
@@ -212,18 +240,19 @@ public:
                     const int64_t gain,
                     std::tm       finalizetime);
 
-    int64_t   createuser(
+    ERROR_CODES_BACCT  createuser(
                     const std::string&  username,
                     const std::string&  address,
                     const std::string&  pass,
                     int64_t      points,
                     int64_t      gain,
                     std::tm      jointime,
-                    std::tm      lastlogintime
+                    std::tm      lastlogintime,
+                    int64_t&     uid
                     );
 
 
-    int64_t getFullSchemeOptionNamesID(Json::Value& root);
+    ERROR_CODES_BACCT getFullSchemeOptionNamesID(Json::Value& root);
 
 };
 
@@ -233,11 +262,14 @@ class testpgdbcommon {
 public:
 Json::Value testparseJSON(std::string spjson);
 Json::Value testBetparseJSON(std::string spjson);
-void testCreateInitialScheme();
-void testCreateScheme();
-void testCreateBet() ;
-void testGetSchemeOptList();
+
+ERROR_CODES_BACCT testCreateInitialScheme();
+ERROR_CODES_BACCT testCreateScheme();
+ERROR_CODES_BACCT testCreateBet();
+ERROR_CODES_BACCT testGetSchemeOptList();
+ERROR_CODES_BACCT testCreateUser();
+ERROR_CODES_BACCT testFinalizeUser();
 };
 
-
+ 
 #endif // PGDBCOMMON_H

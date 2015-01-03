@@ -1,7 +1,10 @@
 #include "pgdbcommon.h"
 #include "error_codes.h"
 
-SCreateBet::SCreateBet(soci::session& sqlsession):m_sql(sqlsession), m_stCreateBet(sqlsession),m_stSelectUPoints(sqlsession)
+SCreateBet::SCreateBet(soci::session& sqlsession):m_sql(sqlsession), 
+m_stCreateBet(sqlsession),
+m_stSelectUPoints(sqlsession),
+m_stUpdateUPoints(sqlsession)
 {
     try
     {
@@ -12,6 +15,10 @@ SCreateBet::SCreateBet(soci::session& sqlsession):m_sql(sqlsession), m_stCreateB
         soci::into(m_curr_bonus, m_curr_bonus_ind ), 
         soci::into( m_curr_purchase, m_curr_purchase_ind), 
         soci::into( m_curr_lastlogin, m_curr_lastlogin_ind ),
+        soci::use(m_userid, "uid") );
+
+        m_stUpdateUPoints = (m_sql.prepare << "update u_table SET points=points-:betpoint where u_id = :uid; ", 
+        soci::use(m_points, "betpoint"),
         soci::use(m_userid, "uid") );
 
                    
@@ -82,7 +89,7 @@ ERROR_CODES_BACCT SCreateBet::createRow( const int64_t schemeid,
     const int64_t points,
     std::tm     bettime )
 {
-    
+    ERROR_CODES_BACCT ret=ERROR_CODES_BACCT::ERROR_BET_FAILED;
     try
     {
         m_scheme_id = schemeid;
@@ -95,35 +102,42 @@ ERROR_CODES_BACCT SCreateBet::createRow( const int64_t schemeid,
         m_stSelectUPoints.execute(false);
         if(m_stSelectUPoints.fetch())
         {
+            ///search for the user and if user has enough points.
            if (m_stSelectUPoints.got_data()) {
                 
             if(soci::i_ok == m_curr_points_ind) {
                 if(m_points > m_curr_points) {
-                    return ERROR_NOT_ENOUGH_POINTS;
+                    return ERROR_CODES_BACCT::ERROR_NOT_ENOUGH_POINTS;
                 }
              } else {
-                return ERROR_QUERY_FAILED;
+                return ERROR_CODES_BACCT::ERROR_USER_POINTS_NULL;
             }
             } else {
-                return ERROR_QUERY_FAILED;
+                ///search for the user failed.
+                return ERROR_CODES_BACCT::ERROR_USER_NOT_FOUND;
             }
                
        } else {
-            return ERROR_QUERY_FAILED;
+            return ERROR_CODES_BACCT::ERROR_QUERY_FAILED;
        }
  
         
         //check correctness of option id
         if(m_opt_id>MAX_OPTS_BACCT || m_opt_id< 1) {
-            return ERROR_OPT_NOT_FOUND;
+            return ERROR_CODES_BACCT::ERROR_OPT_NOT_FOUND;
         }
+        soci::transaction tr(m_sql);
         m_stUpdateSumm[m_opt_id-1]->execute(true);          
         m_stCreateBet.execute(true);
+        m_stUpdateUPoints.execute(true);
+        tr.commit();
     }
     catch (std::exception const &e)
     {
         std::cerr << "Error: " << e.what() << '\n';
-        return ERROR_BET_FAILED;
+        ret=ERROR_CODES_BACCT::ERROR_BET_FAILED;
+        
     }
-    
+    ret=ERROR_CODES_BACCT::ERROR_OK;
+    return ret;
 }

@@ -20,4 +20,9 @@
 #define OPTION_LIST_BACCT "optlist"
 #define BET_POINTS_TAG_BACCT "betpt"
 
+#define OPTIONS_UNAME_BACCT  "uname"
+#define OPTIONS_ADDR_BACCT  "addr"
+#define OPTIONS_PASS_BACCT  "pss"
+
+
 #endif // GENERAL_MACROS_H

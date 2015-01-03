@@ -59,21 +59,22 @@ bool pgdbcommon::chkInit()
 }
 
 
-void pgdbcommon::createInitialScheme()
+ERROR_CODES_BACCT pgdbcommon::createInitialScheme()
 {
     soci::session& sql = *m_sqlptr.get();
     try
     {
         
       sql << "DROP TABLE IF EXISTS u_table CASCADE;";
-      sql << "create table IF NOT EXISTS  u_table ( u_id bigserial, u_idc varchar, points bigint, \
-        gain bigint DEFAULT 0, bonus bigint DEFAULT 0, purchase bigint DEFAULT 0, \
-        name varchar, namev varchar, joindate timestamp, lastlogin timestamp);" ;
+      sql << "create table IF NOT EXISTS  u_table ( u_id bigserial, u_idc varchar NOT NULL, points bigint NOT NULL, \
+        gain bigint NOT NULL DEFAULT 0, bonus bigint NOT NULL DEFAULT 0, purchase bigint NOT NULL DEFAULT 0, \
+        name varchar NOT NULL, namev varchar NOT NULL, joindate timestamp NOT NULL, lastlogin timestamp NOT NULL);" ;
         
       sql << "DROP TABLE IF EXISTS scheme CASCADE;";
-      sql << "create table IF NOT EXISTS scheme( s_id bigserial, scheme_name varchar, permission integer, createtime timestamp, endtime timestamp, uid_created bigint, \
+      sql << "create table IF NOT EXISTS scheme( s_id bigserial, scheme_name varchar NOT NULL, permission integer, \
+        createtime timestamp NOT NULL, endtime timestamp NOT NULL, uid_created bigint NOT NULL, \
        options integer DEFAULT 0, \
-       opt_name_01 varchar, opt_name_02 varchar, opt_name_03 varchar, opt_name_04 varchar, opt_name_05 varchar, opt_name_06 varchar, opt_name_07 varchar,  opt_name_08 varchar,  opt_name_09 varchar,   opt_name_10 varchar, \
+       opt_name_01 varchar NOT NULL, opt_name_02 varchar NOT NULL, opt_name_03 varchar, opt_name_04 varchar, opt_name_05 varchar, opt_name_06 varchar, opt_name_07 varchar,  opt_name_08 varchar,  opt_name_09 varchar,   opt_name_10 varchar, \
        opt_name_11 varchar, opt_name_12 varchar, opt_name_13 varchar, opt_name_14 varchar, opt_name_15 varchar, opt_name_16 varchar, opt_name_17 varchar,  opt_name_18 varchar,  opt_name_19 varchar,   opt_name_20 varchar, \
        isarchived smallint \
        );" ;
@@ -82,7 +83,7 @@ void pgdbcommon::createInitialScheme()
       sql << "create table IF NOT EXISTS schemearchive( LIKE scheme );" ;
 
       sql << "DROP TABLE  IF EXISTS scheme_option_summary CASCADE;";
-      sql << "create table IF NOT EXISTS scheme_option_summary( s_id bigint, no_of_opts int, \
+      sql << "create table IF NOT EXISTS scheme_option_summary( s_id bigint, no_of_opts int NOT NULL, \
                   seq_01 bigint, seq_02 bigint, seq_03 bigint, \
                   seq_04 bigint, seq_05 bigint, seq_06 bigint, seq_07 bigint, seq_08 bigint, seq_09 bigint, seq_10 bigint, \
                   seq_11 bigint, seq_12 bigint, seq_13 bigint, seq_14 bigint, seq_15 bigint, seq_16 bigint, seq_17 bigint, \
@@ -98,12 +99,12 @@ void pgdbcommon::createInitialScheme()
       sql << "DROP TABLE IF EXISTS u_scheme_option_summary CASCADE;";
       
       sql << "DROP TABLE IF EXISTS bet CASCADE;";
-      sql << "create table IF NOT EXISTS bet( s_id bigint, opt_id bigint, u_id bigint,  points bigint,\
-        bettime timestamp );" ;
+      sql << "create table IF NOT EXISTS bet( s_id bigint NOT NULL, opt_id bigint NOT NULL, u_id bigint NOT NULL,  points bigint NOT NULL,\
+        bettime timestamp NOT NULL);" ;
 
       sql << "DROP TABLE IF EXISTS bonus CASCADE;";
-      sql << "create table IF NOT EXISTS bonus( u_id bigint,  points bigint,\
-        btime timestamp );" ;
+      sql << "create table IF NOT EXISTS bonus( u_id bigint NOT NULL,  points bigint NOT NULL,\
+        btime timestamp NOT NULL);" ;
         
         
       sql << "DROP TABLE IF EXISTS bet_archive CASCADE;";
@@ -111,9 +112,9 @@ void pgdbcommon::createInitialScheme()
        
 
       sql << "DROP TABLE IF EXISTS finalizebet CASCADE;";
-      sql << "create table IF NOT EXISTS finalizebet( s_id bigint, \
-      opt_won bigint, opt_of_user bigint, u_id bigint, \
-      points_invested bigint, gain bigint, finalizetime timestamp );" ;
+      sql << "create table IF NOT EXISTS finalizebet( s_id bigint NOT NULL, \
+      opt_won bigint NOT NULL, opt_of_user bigint NOT NULL, u_id bigint NOT NULL, \
+      points_invested bigint NOT NULL, gain bigint NOT NULL, finalizetime timestamp NOT NULL);" ;
       
       m_SCreateScheme.reset( new SCreateScheme(*m_sqlptr.get() ) );
       
@@ -126,18 +127,22 @@ void pgdbcommon::createInitialScheme()
     catch (std::exception const &e)
     {
         std::cerr << "Error: " << e.what() << '\n';
+        return ERROR_OTHER;
     }    
+    return ERROR_OK;
 }
+     
 
-int64_t pgdbcommon::createScheme(
+ERROR_CODES_BACCT pgdbcommon::createScheme(
         const std::string& schemename,
         int64_t  permission,
         std::tm  createtime, 
         std::tm  endtime,
         int64_t  usercreated,
-        const Json::Value& opt_array)
+        const Json::Value& opt_array,
+        int64_t&  sid)
 {
-    int64_t ret = ERROR_OK;
+    ERROR_CODES_BACCT ret = ERROR_OK;
     try
     {
         OPT_ARRAY optarr;
@@ -151,7 +156,8 @@ int64_t pgdbcommon::createScheme(
                     createtime,
                     endtime ,
                     usercreated, 
-                    optarr);
+                    optarr,
+                    sid);
 
     }
     catch (std::exception const &e)
@@ -164,7 +170,7 @@ int64_t pgdbcommon::createScheme(
 }
 
 
-int pgdbcommon::createBet( 
+ERROR_CODES_BACCT pgdbcommon::createBet( 
     const int64_t  scheme_id,
     const int64_t opt_id,
     long        user,
@@ -172,7 +178,7 @@ int pgdbcommon::createBet(
     long        points,
     std::tm     bettime )
 {
-    int ret=ERROR_OTHER;
+    ERROR_CODES_BACCT ret=ERROR_OTHER;
     try
     {
         ret=m_SCreateBet->createRow(scheme_id,
@@ -186,13 +192,13 @@ int pgdbcommon::createBet(
     catch (std::exception const &e)
     {
         std::cerr << "Error: " << e.what() << '\n';
-        throw e; 
+        ret=ERROR_OTHER; 
     }
     return ret;
 }
 
 
-void pgdbcommon::finalizeBet(
+ERROR_CODES_BACCT pgdbcommon::finalizeBet(
         const int64_t scheme_id,
         const int64_t optionwon,
         const int64_t optionofuser,
@@ -202,6 +208,7 @@ void pgdbcommon::finalizeBet(
         std::tm       finalizetime
         )
 {
+    ERROR_CODES_BACCT ret=ERROR_OTHER;
     try
     {
         m_SFinalizeScheme->createRow(scheme_id, 
@@ -215,46 +222,51 @@ void pgdbcommon::finalizeBet(
     catch (std::exception const &e)
     {
         std::cerr << "Error: " << e.what() << '\n';
-        throw e; 
+        ret=ERROR_OTHER; 
     }
+    ret=ERROR_OK;
+    return ret;
 }
 
-int64_t  pgdbcommon::createuser( 
+ERROR_CODES_BACCT  pgdbcommon::createuser( 
                     const std::string&  username,
                     const std::string&  address,
                     const std::string&  pass,
                     int64_t      points,
                     int64_t      gain,
                     std::tm      jointime,
-                    std::tm      lastlogintime
+                    std::tm      lastlogintime,
+                    int64_t&      uid
                     )
 {
+    ERROR_CODES_BACCT ret = ERROR_CODES_BACCT::ERROR_USER_CREATION_FAILED;
     try
     {
         
     points = ConfigLocal::Instance()->m_joinBonus;
     gain=0;
-    m_SUser->createRow(
+    ret = m_SUser->createRow(
                     username,
                     address,
                     pass,
                     points,
                     gain,
                     jointime,
-                    lastlogintime);
+                    lastlogintime,
+                    uid);
         
     }
     catch (std::exception const &e)
     {
         std::cerr << "Error: " << e.what() << '\n';
-        throw e; 
+        
     }
-    return m_SUser->getUID();
+    return ret;
 }
 
-int64_t pgdbcommon::getFullSchemeOptionNamesID(Json::Value& root) {
+ERROR_CODES_BACCT pgdbcommon::getFullSchemeOptionNamesID(Json::Value& root) {
 
-   int ret=ERROR_OTHER;
+   ERROR_CODES_BACCT ret=ERROR_OTHER ;
    try
     {
         LocalCaches::SSCHEME_OPTIONS schemeOptions;
@@ -263,6 +275,7 @@ int64_t pgdbcommon::getFullSchemeOptionNamesID(Json::Value& root) {
         LocalCaches *pCache =LocalCaches::Instance();
         pCache->setFullSchemeOptionNamesIDMap(schemeOptions);   
         pCache->getFullSchemeOptionNamesID(root);
+        ret=ERROR_OK;
     }
     catch (std::exception const &e)
     {
