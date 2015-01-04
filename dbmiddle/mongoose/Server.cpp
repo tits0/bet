@@ -36,7 +36,8 @@ static int do_i_handle(struct mg_connection *connection)
  * The handlers below are written in C to do the binding of the C mongoose with
  * the C++ API
  */
-static int event_handler(struct mg_connection *connection)
+
+static int event_handler(struct mg_connection *connection, enum mg_event _event)
 {
     Server *server = (Server *)connection->server_param;
 
@@ -103,15 +104,15 @@ namespace Mongoose
             requests = 0;
             startTime = getTime();
 #endif
-            server = mg_create_server(this);
+            server = mg_create_server(this, event_handler);
 
             map<string, string>::iterator it;
             for (it=optionsMap.begin(); it!=optionsMap.end(); it++) {
                 mg_set_option(server, (*it).first.c_str(), (*it).second.c_str());
             }
 
-            mg_add_uri_handler(server, "/", event_handler);
-            mg_server_do_i_handle(server, do_i_handle);
+            //mg_add_uri_handler(server, "/", event_handler);
+            //mg_server_do_i_handle(server, do_i_handle);
 
             stopped = false;
             mg_start_thread(server_poll, this);
@@ -128,7 +129,7 @@ namespace Mongoose
         while (!stopped) {
             mg_poll_server(server, 1000);
 #ifndef NO_WEBSOCKET
-            mg_iterate_over_connections(server, iterate_callback, &current_timer);
+            //mg_iterate_over_connections(server, iterate_callback, &current_timer);
 #endif
         }
 

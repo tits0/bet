@@ -275,3 +275,32 @@ ERROR_CODES_BACCT pgdbcommon::getFullSchemeOptionNamesID(Json::Value& root) {
     }
     return ret;
 }
+
+ERROR_CODES_BACCT  pgdbcommon::getPoints(  
+                int64_t&  purchase,
+                int64_t&  bonus,
+                int64_t&  points,
+                int64_t&  gain,
+                std::tm&  lastlogintime,
+                const int64_t uid
+                )
+{
+    ERROR_CODES_BACCT ret = ERROR_CODES_BACCT::ERROR_UNDEFINED;
+    try
+    {
+    ret = m_SUser->getPoints(
+            purchase,
+            bonus,
+            points,
+            gain,
+            lastlogintime,
+            uid
+            );
+    }
+    catch (std::exception const &e)
+    {
+        std::cerr << "Error: " << e.what() << '\n';
+    }
+    return ret;
+}
+

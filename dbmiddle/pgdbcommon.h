@@ -213,8 +213,8 @@ public:
                     int64_t&  sid
                     );
 
-    ERROR_CODES_BACCT createSchemeOptions(const int64_t schemename,
-                    const std::string&  optname);
+    //ERROR_CODES_BACCT createSchemeOptions(const int64_t schemename,
+    //                const std::string&  optname);
 
     ERROR_CODES_BACCT createBet( const int64_t  schemeid,
                     const int64_t optid,
@@ -239,8 +239,17 @@ public:
                     int64_t&     uid
                     );
 
-
     ERROR_CODES_BACCT getFullSchemeOptionNamesID(Json::Value& root);
+
+    ERROR_CODES_BACCT  getPoints(  
+                    int64_t&  purchase,
+                    int64_t&  bonus,
+                    int64_t&  points,
+                    int64_t&  gain,
+                    std::tm&  lastlogintime,
+                    const int64_t uid
+                    );
+
 
 };
 

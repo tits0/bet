@@ -41,6 +41,9 @@
     <File Name="SGetSchemeNOptions.cpp"/>
     <File Name="ConfigLocal.cpp"/>
     <File Name="mongoose.c"/>
+    <File Name="RestAPI.h"/>
+    <File Name="RestAPI.cpp"/>
+    <File Name="rest_impl.cpp"/>
   </VirtualDirectory>
   <VirtualDirectory Name="doc">
     <File Name="config.txt"/>
@@ -151,40 +154,5 @@
     <File Name="pgdbcommon.h"/>
     <File Name="general_macros.h"/>
     <File Name="mongoose.h"/>
-    <VirtualDirectory Name="mongoose_h">
-      <File Name="mongoose/Controller.h"/>
-      <File Name="mongoose/JsonController.h"/>
-      <File Name="mongoose/JsonResponse.h"/>
-      <File Name="mongoose/Mutex.h"/>
-      <File Name="mongoose/Request.h"/>
-      <File Name="mongoose/RequestHandler.h"/>
-      <File Name="mongoose/Response.h"/>
-      <File Name="mongoose/Server.h"/>
-      <File Name="mongoose/Session.h"/>
-      <File Name="mongoose/Sessions.h"/>
-      <File Name="mongoose/StreamResponse.h"/>
-      <File Name="mongoose/UploadFile.h"/>
-      <File Name="mongoose/Utils.h"/>
-      <File Name="mongoose/WebController.h"/>
-      <File Name="mongoose/WebSocket.h"/>
-      <File Name="mongoose/WebSockets.h"/>
-    </VirtualDirectory>
-  </VirtualDirectory>
-  <VirtualDirectory Name="mongoose">
-    <File Name="mongoose/Controller.cpp"/>
-    <File Name="mongoose/JsonController.cpp"/>
-    <File Name="mongoose/JsonResponse.cpp"/>
-    <File Name="mongoose/Mutex.cpp"/>
-    <File Name="mongoose/Request.cpp"/>
-    <File Name="mongoose/Response.cpp"/>
-    <File Name="mongoose/Server.cpp"/>
-    <File Name="mongoose/Session.cpp"/>
-    <File Name="mongoose/Sessions.cpp"/>
-    <File Name="mongoose/StreamResponse.cpp"/>
-    <File Name="mongoose/UploadFile.cpp"/>
-    <File Name="mongoose/Utils.cpp"/>
-    <File Name="mongoose/WebController.cpp"/>
-    <File Name="mongoose/WebSocket.cpp"/>
-    <File Name="mongoose/WebSockets.cpp"/>
   </VirtualDirectory>
 </CodeLite_Project>

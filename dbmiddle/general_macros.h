@@ -4,6 +4,11 @@
 #define MAX_OPTS_BACCT 20
 #define MIN_OPTS_BACCT 2
 
+#define CREATESCHEME "/api/newscheme"
+#define CREATEBET "/api/newbet"
+#define GETFULLSCHEMEOPTIONNAMESID "/api/schemes"
+#define GETPOINTS "/api/getpoints"
+
 #define UID_TAG_BACCT  "uid"
 #define SESSION_TAG_BACCT  "session"
 #define SCHEME_TAG_BACCT  "scheme"
