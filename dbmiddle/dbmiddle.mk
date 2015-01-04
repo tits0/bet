@@ -62,7 +62,8 @@ AS       := /usr/bin/as
 CodeLiteDir:=/usr/share/codelite
 LD_LIBRARY_PATH:=./soci/build/lib;../soci/build/lib
 Objects0=$(IntermediateDirectory)/main.cpp$(ObjectSuffix) $(IntermediateDirectory)/pgdbcommon.cpp$(ObjectSuffix) $(IntermediateDirectory)/SCreateScheme.cpp$(ObjectSuffix) $(IntermediateDirectory)/SCreateBet.cpp$(ObjectSuffix) $(IntermediateDirectory)/SFinalizeScheme.cpp$(ObjectSuffix) $(IntermediateDirectory)/SUser.cpp$(ObjectSuffix) $(IntermediateDirectory)/error_codes.cpp$(ObjectSuffix) $(IntermediateDirectory)/UnitTest.cpp$(ObjectSuffix) $(IntermediateDirectory)/LocalCaches.cpp$(ObjectSuffix) $(IntermediateDirectory)/SGetSchemeNOptions.cpp$(ObjectSuffix) \
-	$(IntermediateDirectory)/ConfigLocal.cpp$(ObjectSuffix) 
+	$(IntermediateDirectory)/ConfigLocal.cpp$(ObjectSuffix) $(IntermediateDirectory)/mongoose.c$(ObjectSuffix) $(IntermediateDirectory)/mongoose_Controller.cpp$(ObjectSuffix) $(IntermediateDirectory)/mongoose_JsonController.cpp$(ObjectSuffix) $(IntermediateDirectory)/mongoose_JsonResponse.cpp$(ObjectSuffix) $(IntermediateDirectory)/mongoose_Mutex.cpp$(ObjectSuffix) $(IntermediateDirectory)/mongoose_Request.cpp$(ObjectSuffix) $(IntermediateDirectory)/mongoose_Response.cpp$(ObjectSuffix) $(IntermediateDirectory)/mongoose_Server.cpp$(ObjectSuffix) $(IntermediateDirectory)/mongoose_Session.cpp$(ObjectSuffix) \
+	$(IntermediateDirectory)/mongoose_Sessions.cpp$(ObjectSuffix) $(IntermediateDirectory)/mongoose_StreamResponse.cpp$(ObjectSuffix) $(IntermediateDirectory)/mongoose_UploadFile.cpp$(ObjectSuffix) $(IntermediateDirectory)/mongoose_Utils.cpp$(ObjectSuffix) $(IntermediateDirectory)/mongoose_WebController.cpp$(ObjectSuffix) $(IntermediateDirectory)/mongoose_WebSocket.cpp$(ObjectSuffix) $(IntermediateDirectory)/mongoose_WebSockets.cpp$(ObjectSuffix) 
 
 
 
@@ -176,6 +177,134 @@ $(IntermediateDirectory)/ConfigLocal.cpp$(DependSuffix): ConfigLocal.cpp
 
 $(IntermediateDirectory)/ConfigLocal.cpp$(PreprocessSuffix): ConfigLocal.cpp
 	@$(CXX) $(CXXFLAGS) $(IncludePCH) $(IncludePath) $(PreprocessOnlySwitch) $(OutputSwitch) $(IntermediateDirectory)/ConfigLocal.cpp$(PreprocessSuffix) "ConfigLocal.cpp"
+
+$(IntermediateDirectory)/mongoose.c$(ObjectSuffix): mongoose.c $(IntermediateDirectory)/mongoose.c$(DependSuffix)
+	$(CC) $(SourceSwitch) "/home/anandrathi/sre/baccount/dbmiddle/mongoose.c" $(CFLAGS) $(ObjectSwitch)$(IntermediateDirectory)/mongoose.c$(ObjectSuffix) $(IncludePath)
+$(IntermediateDirectory)/mongoose.c$(DependSuffix): mongoose.c
+	@$(CC) $(CFLAGS) $(IncludePath) -MG -MP -MT$(IntermediateDirectory)/mongoose.c$(ObjectSuffix) -MF$(IntermediateDirectory)/mongoose.c$(DependSuffix) -MM "mongoose.c"
+
+$(IntermediateDirectory)/mongoose.c$(PreprocessSuffix): mongoose.c
+	@$(CC) $(CFLAGS) $(IncludePath) $(PreprocessOnlySwitch) $(OutputSwitch) $(IntermediateDirectory)/mongoose.c$(PreprocessSuffix) "mongoose.c"
+
+$(IntermediateDirectory)/mongoose_Controller.cpp$(ObjectSuffix): mongoose/Controller.cpp $(IntermediateDirectory)/mongoose_Controller.cpp$(DependSuffix)
+	$(CXX) $(IncludePCH) $(SourceSwitch) "/home/anandrathi/sre/baccount/dbmiddle/mongoose/Controller.cpp" $(CXXFLAGS) $(ObjectSwitch)$(IntermediateDirectory)/mongoose_Controller.cpp$(ObjectSuffix) $(IncludePath)
+$(IntermediateDirectory)/mongoose_Controller.cpp$(DependSuffix): mongoose/Controller.cpp
+	@$(CXX) $(CXXFLAGS) $(IncludePCH) $(IncludePath) -MG -MP -MT$(IntermediateDirectory)/mongoose_Controller.cpp$(ObjectSuffix) -MF$(IntermediateDirectory)/mongoose_Controller.cpp$(DependSuffix) -MM "mongoose/Controller.cpp"
+
+$(IntermediateDirectory)/mongoose_Controller.cpp$(PreprocessSuffix): mongoose/Controller.cpp
+	@$(CXX) $(CXXFLAGS) $(IncludePCH) $(IncludePath) $(PreprocessOnlySwitch) $(OutputSwitch) $(IntermediateDirectory)/mongoose_Controller.cpp$(PreprocessSuffix) "mongoose/Controller.cpp"
+
+$(IntermediateDirectory)/mongoose_JsonController.cpp$(ObjectSuffix): mongoose/JsonController.cpp $(IntermediateDirectory)/mongoose_JsonController.cpp$(DependSuffix)
+	$(CXX) $(IncludePCH) $(SourceSwitch) "/home/anandrathi/sre/baccount/dbmiddle/mongoose/JsonController.cpp" $(CXXFLAGS) $(ObjectSwitch)$(IntermediateDirectory)/mongoose_JsonController.cpp$(ObjectSuffix) $(IncludePath)
+$(IntermediateDirectory)/mongoose_JsonController.cpp$(DependSuffix): mongoose/JsonController.cpp
+	@$(CXX) $(CXXFLAGS) $(IncludePCH) $(IncludePath) -MG -MP -MT$(IntermediateDirectory)/mongoose_JsonController.cpp$(ObjectSuffix) -MF$(IntermediateDirectory)/mongoose_JsonController.cpp$(DependSuffix) -MM "mongoose/JsonController.cpp"
+
+$(IntermediateDirectory)/mongoose_JsonController.cpp$(PreprocessSuffix): mongoose/JsonController.cpp
+	@$(CXX) $(CXXFLAGS) $(IncludePCH) $(IncludePath) $(PreprocessOnlySwitch) $(OutputSwitch) $(IntermediateDirectory)/mongoose_JsonController.cpp$(PreprocessSuffix) "mongoose/JsonController.cpp"
+
+$(IntermediateDirectory)/mongoose_JsonResponse.cpp$(ObjectSuffix): mongoose/JsonResponse.cpp $(IntermediateDirectory)/mongoose_JsonResponse.cpp$(DependSuffix)
+	$(CXX) $(IncludePCH) $(SourceSwitch) "/home/anandrathi/sre/baccount/dbmiddle/mongoose/JsonResponse.cpp" $(CXXFLAGS) $(ObjectSwitch)$(IntermediateDirectory)/mongoose_JsonResponse.cpp$(ObjectSuffix) $(IncludePath)
+$(IntermediateDirectory)/mongoose_JsonResponse.cpp$(DependSuffix): mongoose/JsonResponse.cpp
+	@$(CXX) $(CXXFLAGS) $(IncludePCH) $(IncludePath) -MG -MP -MT$(IntermediateDirectory)/mongoose_JsonResponse.cpp$(ObjectSuffix) -MF$(IntermediateDirectory)/mongoose_JsonResponse.cpp$(DependSuffix) -MM "mongoose/JsonResponse.cpp"
+
+$(IntermediateDirectory)/mongoose_JsonResponse.cpp$(PreprocessSuffix): mongoose/JsonResponse.cpp
+	@$(CXX) $(CXXFLAGS) $(IncludePCH) $(IncludePath) $(PreprocessOnlySwitch) $(OutputSwitch) $(IntermediateDirectory)/mongoose_JsonResponse.cpp$(PreprocessSuffix) "mongoose/JsonResponse.cpp"
+
+$(IntermediateDirectory)/mongoose_Mutex.cpp$(ObjectSuffix): mongoose/Mutex.cpp $(IntermediateDirectory)/mongoose_Mutex.cpp$(DependSuffix)
+	$(CXX) $(IncludePCH) $(SourceSwitch) "/home/anandrathi/sre/baccount/dbmiddle/mongoose/Mutex.cpp" $(CXXFLAGS) $(ObjectSwitch)$(IntermediateDirectory)/mongoose_Mutex.cpp$(ObjectSuffix) $(IncludePath)
+$(IntermediateDirectory)/mongoose_Mutex.cpp$(DependSuffix): mongoose/Mutex.cpp
+	@$(CXX) $(CXXFLAGS) $(IncludePCH) $(IncludePath) -MG -MP -MT$(IntermediateDirectory)/mongoose_Mutex.cpp$(ObjectSuffix) -MF$(IntermediateDirectory)/mongoose_Mutex.cpp$(DependSuffix) -MM "mongoose/Mutex.cpp"
+
+$(IntermediateDirectory)/mongoose_Mutex.cpp$(PreprocessSuffix): mongoose/Mutex.cpp
+	@$(CXX) $(CXXFLAGS) $(IncludePCH) $(IncludePath) $(PreprocessOnlySwitch) $(OutputSwitch) $(IntermediateDirectory)/mongoose_Mutex.cpp$(PreprocessSuffix) "mongoose/Mutex.cpp"
+
+$(IntermediateDirectory)/mongoose_Request.cpp$(ObjectSuffix): mongoose/Request.cpp $(IntermediateDirectory)/mongoose_Request.cpp$(DependSuffix)
+	$(CXX) $(IncludePCH) $(SourceSwitch) "/home/anandrathi/sre/baccount/dbmiddle/mongoose/Request.cpp" $(CXXFLAGS) $(ObjectSwitch)$(IntermediateDirectory)/mongoose_Request.cpp$(ObjectSuffix) $(IncludePath)
+$(IntermediateDirectory)/mongoose_Request.cpp$(DependSuffix): mongoose/Request.cpp
+	@$(CXX) $(CXXFLAGS) $(IncludePCH) $(IncludePath) -MG -MP -MT$(IntermediateDirectory)/mongoose_Request.cpp$(ObjectSuffix) -MF$(IntermediateDirectory)/mongoose_Request.cpp$(DependSuffix) -MM "mongoose/Request.cpp"
+
+$(IntermediateDirectory)/mongoose_Request.cpp$(PreprocessSuffix): mongoose/Request.cpp
+	@$(CXX) $(CXXFLAGS) $(IncludePCH) $(IncludePath) $(PreprocessOnlySwitch) $(OutputSwitch) $(IntermediateDirectory)/mongoose_Request.cpp$(PreprocessSuffix) "mongoose/Request.cpp"
+
+$(IntermediateDirectory)/mongoose_Response.cpp$(ObjectSuffix): mongoose/Response.cpp $(IntermediateDirectory)/mongoose_Response.cpp$(DependSuffix)
+	$(CXX) $(IncludePCH) $(SourceSwitch) "/home/anandrathi/sre/baccount/dbmiddle/mongoose/Response.cpp" $(CXXFLAGS) $(ObjectSwitch)$(IntermediateDirectory)/mongoose_Response.cpp$(ObjectSuffix) $(IncludePath)
+$(IntermediateDirectory)/mongoose_Response.cpp$(DependSuffix): mongoose/Response.cpp
+	@$(CXX) $(CXXFLAGS) $(IncludePCH) $(IncludePath) -MG -MP -MT$(IntermediateDirectory)/mongoose_Response.cpp$(ObjectSuffix) -MF$(IntermediateDirectory)/mongoose_Response.cpp$(DependSuffix) -MM "mongoose/Response.cpp"
+
+$(IntermediateDirectory)/mongoose_Response.cpp$(PreprocessSuffix): mongoose/Response.cpp
+	@$(CXX) $(CXXFLAGS) $(IncludePCH) $(IncludePath) $(PreprocessOnlySwitch) $(OutputSwitch) $(IntermediateDirectory)/mongoose_Response.cpp$(PreprocessSuffix) "mongoose/Response.cpp"
+
+$(IntermediateDirectory)/mongoose_Server.cpp$(ObjectSuffix): mongoose/Server.cpp $(IntermediateDirectory)/mongoose_Server.cpp$(DependSuffix)
+	$(CXX) $(IncludePCH) $(SourceSwitch) "/home/anandrathi/sre/baccount/dbmiddle/mongoose/Server.cpp" $(CXXFLAGS) $(ObjectSwitch)$(IntermediateDirectory)/mongoose_Server.cpp$(ObjectSuffix) $(IncludePath)
+$(IntermediateDirectory)/mongoose_Server.cpp$(DependSuffix): mongoose/Server.cpp
+	@$(CXX) $(CXXFLAGS) $(IncludePCH) $(IncludePath) -MG -MP -MT$(IntermediateDirectory)/mongoose_Server.cpp$(ObjectSuffix) -MF$(IntermediateDirectory)/mongoose_Server.cpp$(DependSuffix) -MM "mongoose/Server.cpp"
+
+$(IntermediateDirectory)/mongoose_Server.cpp$(PreprocessSuffix): mongoose/Server.cpp
+	@$(CXX) $(CXXFLAGS) $(IncludePCH) $(IncludePath) $(PreprocessOnlySwitch) $(OutputSwitch) $(IntermediateDirectory)/mongoose_Server.cpp$(PreprocessSuffix) "mongoose/Server.cpp"
+
+$(IntermediateDirectory)/mongoose_Session.cpp$(ObjectSuffix): mongoose/Session.cpp $(IntermediateDirectory)/mongoose_Session.cpp$(DependSuffix)
+	$(CXX) $(IncludePCH) $(SourceSwitch) "/home/anandrathi/sre/baccount/dbmiddle/mongoose/Session.cpp" $(CXXFLAGS) $(ObjectSwitch)$(IntermediateDirectory)/mongoose_Session.cpp$(ObjectSuffix) $(IncludePath)
+$(IntermediateDirectory)/mongoose_Session.cpp$(DependSuffix): mongoose/Session.cpp
+	@$(CXX) $(CXXFLAGS) $(IncludePCH) $(IncludePath) -MG -MP -MT$(IntermediateDirectory)/mongoose_Session.cpp$(ObjectSuffix) -MF$(IntermediateDirectory)/mongoose_Session.cpp$(DependSuffix) -MM "mongoose/Session.cpp"
+
+$(IntermediateDirectory)/mongoose_Session.cpp$(PreprocessSuffix): mongoose/Session.cpp
+	@$(CXX) $(CXXFLAGS) $(IncludePCH) $(IncludePath) $(PreprocessOnlySwitch) $(OutputSwitch) $(IntermediateDirectory)/mongoose_Session.cpp$(PreprocessSuffix) "mongoose/Session.cpp"
+
+$(IntermediateDirectory)/mongoose_Sessions.cpp$(ObjectSuffix): mongoose/Sessions.cpp $(IntermediateDirectory)/mongoose_Sessions.cpp$(DependSuffix)
+	$(CXX) $(IncludePCH) $(SourceSwitch) "/home/anandrathi/sre/baccount/dbmiddle/mongoose/Sessions.cpp" $(CXXFLAGS) $(ObjectSwitch)$(IntermediateDirectory)/mongoose_Sessions.cpp$(ObjectSuffix) $(IncludePath)
+$(IntermediateDirectory)/mongoose_Sessions.cpp$(DependSuffix): mongoose/Sessions.cpp
+	@$(CXX) $(CXXFLAGS) $(IncludePCH) $(IncludePath) -MG -MP -MT$(IntermediateDirectory)/mongoose_Sessions.cpp$(ObjectSuffix) -MF$(IntermediateDirectory)/mongoose_Sessions.cpp$(DependSuffix) -MM "mongoose/Sessions.cpp"
+
+$(IntermediateDirectory)/mongoose_Sessions.cpp$(PreprocessSuffix): mongoose/Sessions.cpp
+	@$(CXX) $(CXXFLAGS) $(IncludePCH) $(IncludePath) $(PreprocessOnlySwitch) $(OutputSwitch) $(IntermediateDirectory)/mongoose_Sessions.cpp$(PreprocessSuffix) "mongoose/Sessions.cpp"
+
+$(IntermediateDirectory)/mongoose_StreamResponse.cpp$(ObjectSuffix): mongoose/StreamResponse.cpp $(IntermediateDirectory)/mongoose_StreamResponse.cpp$(DependSuffix)
+	$(CXX) $(IncludePCH) $(SourceSwitch) "/home/anandrathi/sre/baccount/dbmiddle/mongoose/StreamResponse.cpp" $(CXXFLAGS) $(ObjectSwitch)$(IntermediateDirectory)/mongoose_StreamResponse.cpp$(ObjectSuffix) $(IncludePath)
+$(IntermediateDirectory)/mongoose_StreamResponse.cpp$(DependSuffix): mongoose/StreamResponse.cpp
+	@$(CXX) $(CXXFLAGS) $(IncludePCH) $(IncludePath) -MG -MP -MT$(IntermediateDirectory)/mongoose_StreamResponse.cpp$(ObjectSuffix) -MF$(IntermediateDirectory)/mongoose_StreamResponse.cpp$(DependSuffix) -MM "mongoose/StreamResponse.cpp"
+
+$(IntermediateDirectory)/mongoose_StreamResponse.cpp$(PreprocessSuffix): mongoose/StreamResponse.cpp
+	@$(CXX) $(CXXFLAGS) $(IncludePCH) $(IncludePath) $(PreprocessOnlySwitch) $(OutputSwitch) $(IntermediateDirectory)/mongoose_StreamResponse.cpp$(PreprocessSuffix) "mongoose/StreamResponse.cpp"
+
+$(IntermediateDirectory)/mongoose_UploadFile.cpp$(ObjectSuffix): mongoose/UploadFile.cpp $(IntermediateDirectory)/mongoose_UploadFile.cpp$(DependSuffix)
+	$(CXX) $(IncludePCH) $(SourceSwitch) "/home/anandrathi/sre/baccount/dbmiddle/mongoose/UploadFile.cpp" $(CXXFLAGS) $(ObjectSwitch)$(IntermediateDirectory)/mongoose_UploadFile.cpp$(ObjectSuffix) $(IncludePath)
+$(IntermediateDirectory)/mongoose_UploadFile.cpp$(DependSuffix): mongoose/UploadFile.cpp
+	@$(CXX) $(CXXFLAGS) $(IncludePCH) $(IncludePath) -MG -MP -MT$(IntermediateDirectory)/mongoose_UploadFile.cpp$(ObjectSuffix) -MF$(IntermediateDirectory)/mongoose_UploadFile.cpp$(DependSuffix) -MM "mongoose/UploadFile.cpp"
+
+$(IntermediateDirectory)/mongoose_UploadFile.cpp$(PreprocessSuffix): mongoose/UploadFile.cpp
+	@$(CXX) $(CXXFLAGS) $(IncludePCH) $(IncludePath) $(PreprocessOnlySwitch) $(OutputSwitch) $(IntermediateDirectory)/mongoose_UploadFile.cpp$(PreprocessSuffix) "mongoose/UploadFile.cpp"
+
+$(IntermediateDirectory)/mongoose_Utils.cpp$(ObjectSuffix): mongoose/Utils.cpp $(IntermediateDirectory)/mongoose_Utils.cpp$(DependSuffix)
+	$(CXX) $(IncludePCH) $(SourceSwitch) "/home/anandrathi/sre/baccount/dbmiddle/mongoose/Utils.cpp" $(CXXFLAGS) $(ObjectSwitch)$(IntermediateDirectory)/mongoose_Utils.cpp$(ObjectSuffix) $(IncludePath)
+$(IntermediateDirectory)/mongoose_Utils.cpp$(DependSuffix): mongoose/Utils.cpp
+	@$(CXX) $(CXXFLAGS) $(IncludePCH) $(IncludePath) -MG -MP -MT$(IntermediateDirectory)/mongoose_Utils.cpp$(ObjectSuffix) -MF$(IntermediateDirectory)/mongoose_Utils.cpp$(DependSuffix) -MM "mongoose/Utils.cpp"
+
+$(IntermediateDirectory)/mongoose_Utils.cpp$(PreprocessSuffix): mongoose/Utils.cpp
+	@$(CXX) $(CXXFLAGS) $(IncludePCH) $(IncludePath) $(PreprocessOnlySwitch) $(OutputSwitch) $(IntermediateDirectory)/mongoose_Utils.cpp$(PreprocessSuffix) "mongoose/Utils.cpp"
+
+$(IntermediateDirectory)/mongoose_WebController.cpp$(ObjectSuffix): mongoose/WebController.cpp $(IntermediateDirectory)/mongoose_WebController.cpp$(DependSuffix)
+	$(CXX) $(IncludePCH) $(SourceSwitch) "/home/anandrathi/sre/baccount/dbmiddle/mongoose/WebController.cpp" $(CXXFLAGS) $(ObjectSwitch)$(IntermediateDirectory)/mongoose_WebController.cpp$(ObjectSuffix) $(IncludePath)
+$(IntermediateDirectory)/mongoose_WebController.cpp$(DependSuffix): mongoose/WebController.cpp
+	@$(CXX) $(CXXFLAGS) $(IncludePCH) $(IncludePath) -MG -MP -MT$(IntermediateDirectory)/mongoose_WebController.cpp$(ObjectSuffix) -MF$(IntermediateDirectory)/mongoose_WebController.cpp$(DependSuffix) -MM "mongoose/WebController.cpp"
+
+$(IntermediateDirectory)/mongoose_WebController.cpp$(PreprocessSuffix): mongoose/WebController.cpp
+	@$(CXX) $(CXXFLAGS) $(IncludePCH) $(IncludePath) $(PreprocessOnlySwitch) $(OutputSwitch) $(IntermediateDirectory)/mongoose_WebController.cpp$(PreprocessSuffix) "mongoose/WebController.cpp"
+
+$(IntermediateDirectory)/mongoose_WebSocket.cpp$(ObjectSuffix): mongoose/WebSocket.cpp $(IntermediateDirectory)/mongoose_WebSocket.cpp$(DependSuffix)
+	$(CXX) $(IncludePCH) $(SourceSwitch) "/home/anandrathi/sre/baccount/dbmiddle/mongoose/WebSocket.cpp" $(CXXFLAGS) $(ObjectSwitch)$(IntermediateDirectory)/mongoose_WebSocket.cpp$(ObjectSuffix) $(IncludePath)
+$(IntermediateDirectory)/mongoose_WebSocket.cpp$(DependSuffix): mongoose/WebSocket.cpp
+	@$(CXX) $(CXXFLAGS) $(IncludePCH) $(IncludePath) -MG -MP -MT$(IntermediateDirectory)/mongoose_WebSocket.cpp$(ObjectSuffix) -MF$(IntermediateDirectory)/mongoose_WebSocket.cpp$(DependSuffix) -MM "mongoose/WebSocket.cpp"
+
+$(IntermediateDirectory)/mongoose_WebSocket.cpp$(PreprocessSuffix): mongoose/WebSocket.cpp
+	@$(CXX) $(CXXFLAGS) $(IncludePCH) $(IncludePath) $(PreprocessOnlySwitch) $(OutputSwitch) $(IntermediateDirectory)/mongoose_WebSocket.cpp$(PreprocessSuffix) "mongoose/WebSocket.cpp"
+
+$(IntermediateDirectory)/mongoose_WebSockets.cpp$(ObjectSuffix): mongoose/WebSockets.cpp $(IntermediateDirectory)/mongoose_WebSockets.cpp$(DependSuffix)
+	$(CXX) $(IncludePCH) $(SourceSwitch) "/home/anandrathi/sre/baccount/dbmiddle/mongoose/WebSockets.cpp" $(CXXFLAGS) $(ObjectSwitch)$(IntermediateDirectory)/mongoose_WebSockets.cpp$(ObjectSuffix) $(IncludePath)
+$(IntermediateDirectory)/mongoose_WebSockets.cpp$(DependSuffix): mongoose/WebSockets.cpp
+	@$(CXX) $(CXXFLAGS) $(IncludePCH) $(IncludePath) -MG -MP -MT$(IntermediateDirectory)/mongoose_WebSockets.cpp$(ObjectSuffix) -MF$(IntermediateDirectory)/mongoose_WebSockets.cpp$(DependSuffix) -MM "mongoose/WebSockets.cpp"
+
+$(IntermediateDirectory)/mongoose_WebSockets.cpp$(PreprocessSuffix): mongoose/WebSockets.cpp
+	@$(CXX) $(CXXFLAGS) $(IncludePCH) $(IncludePath) $(PreprocessOnlySwitch) $(OutputSwitch) $(IntermediateDirectory)/mongoose_WebSockets.cpp$(PreprocessSuffix) "mongoose/WebSockets.cpp"
 
 
 -include $(IntermediateDirectory)/*$(DependSuffix)
