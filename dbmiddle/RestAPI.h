@@ -12,16 +12,16 @@ private:
     RestAPI(const RestAPI& rhs);
     RestAPI& operator=(const RestAPI& rhs);
     
-    Json::Value testparseJSON(std::string spjson);
+    Json::Value testparseJSON(const char* input );
 public:
     RestAPI();
     ~RestAPI();
     int RestServer(void);
     int handle_restful_call(struct mg_connection *conn, enum mg_event ev);
-    ERROR_CODES_BACCT createScheme(Json::Value& root);
-    ERROR_CODES_BACCT createBet(Json::Value& root);
-    ERROR_CODES_BACCT getFullSchemeOptionNamesID(Json::Value& root);
-    ERROR_CODES_BACCT getPoints(Json::Value& root);
+    ERROR_CODES_BACCT createScheme(const char* input, Json::Value& root);
+    ERROR_CODES_BACCT createBet(const char* input, Json::Value& root);
+    ERROR_CODES_BACCT getFullSchemeOptionNamesID(const char* input, Json::Value& root);
+    ERROR_CODES_BACCT getPoints(const char* input, Json::Value& root);
     
 };
 

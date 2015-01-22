@@ -12,6 +12,8 @@
 #define UID_TAG_BACCT  "uid"
 #define SESSION_TAG_BACCT  "session"
 #define SCHEME_TAG_BACCT  "scheme"
+#define SCHEME_DAYS_BACCT  "sch_days"
+#define SCHEME_HRS_BACCT  "sch_hrs"
 
 #define SCHEME_ID_TAG_BACCT "schid"
 #define SCHEME_TOTAL_TAG_BACCT "schtot"

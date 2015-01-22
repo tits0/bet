@@ -58,6 +58,8 @@ bool pgdbcommon::chkInit()
     return true;
 }
 
+//declare a function used in createInitialScheme
+ERROR_CODES_BACCT CreateGetgain(soci::session& sql);
 
 ERROR_CODES_BACCT pgdbcommon::createInitialScheme()
 {
@@ -66,56 +68,55 @@ ERROR_CODES_BACCT pgdbcommon::createInitialScheme()
     {
         
       sql << "DROP TABLE IF EXISTS u_table CASCADE;";
-      sql << "create table IF NOT EXISTS  u_table ( u_id bigserial, u_idc varchar NOT NULL, points bigint NOT NULL, \
-        gain bigint NOT NULL DEFAULT 0, bonus bigint NOT NULL DEFAULT 0, purchase bigint NOT NULL DEFAULT 0, \
+      sql << "create table IF NOT EXISTS  u_table ( u_id bigserial, u_idc varchar NOT NULL, points numeric NOT NULL, \
+        gain numeric NOT NULL DEFAULT 0, bonus bigint NOT NULL DEFAULT 0, purchase bigint NOT NULL DEFAULT 0, \
         name varchar NOT NULL, namev varchar NOT NULL, joindate timestamp NOT NULL, lastlogin timestamp NOT NULL);" ;
         
       sql << "DROP TABLE IF EXISTS scheme CASCADE;";
       sql << "create table IF NOT EXISTS scheme( s_id bigserial, scheme_name varchar NOT NULL, permission integer, \
         createtime timestamp NOT NULL, endtime timestamp NOT NULL, uid_created bigint NOT NULL, \
-       options integer DEFAULT 0, \
-       opt_name_01 varchar NOT NULL, opt_name_02 varchar NOT NULL, opt_name_03 varchar, opt_name_04 varchar, opt_name_05 varchar, opt_name_06 varchar, opt_name_07 varchar,  opt_name_08 varchar,  opt_name_09 varchar,   opt_name_10 varchar, \
-       opt_name_11 varchar, opt_name_12 varchar, opt_name_13 varchar, opt_name_14 varchar, opt_name_15 varchar, opt_name_16 varchar, opt_name_17 varchar,  opt_name_18 varchar,  opt_name_19 varchar,   opt_name_20 varchar, \
-       isarchived smallint \
-       );" ;
+       options integer DEFAULT 0, total numeric NOT NULL DEFAULT 0,\
+       isarchived smallint );" ;
+
+      sql << "DROP TABLE IF EXISTS options CASCADE;";
+      sql << "create table IF NOT EXISTS options(s_id bigint, opt_id integer, opt_name varchar NOT NULL, \
+      opttotal numeric NOT NULL DEFAULT 0, placed bigint NOT NULL DEFAULT 0);" ;
       
-      sql << "DROP TABLE  IF EXISTS schemearchive CASCADE;";
-      sql << "create table IF NOT EXISTS schemearchive( LIKE scheme );" ;
 
       sql << "DROP TABLE  IF EXISTS scheme_option_summary CASCADE;";
       sql << "create table IF NOT EXISTS scheme_option_summary( s_id bigint, no_of_opts int NOT NULL, \
-                  seq_01 bigint, seq_02 bigint, seq_03 bigint, \
-                  seq_04 bigint, seq_05 bigint, seq_06 bigint, seq_07 bigint, seq_08 bigint, seq_09 bigint, seq_10 bigint, \
-                  seq_11 bigint, seq_12 bigint, seq_13 bigint, seq_14 bigint, seq_15 bigint, seq_16 bigint, seq_17 bigint, \
-                  seq_18 bigint, seq_19 bigint, seq_20 bigint, \
-                  placed_seq_01 bigint, placed_seq_02 bigint, placed_seq_03 bigint, \
-                  placed_seq_04 bigint, placed_seq_05 bigint, placed_seq_06 bigint, placed_seq_07 bigint, placed_seq_08 bigint, placed_seq_09 bigint, placed_seq_10 bigint, \
-                  placed_seq_11 bigint, placed_seq_12 bigint, placed_seq_13 bigint, placed_seq_14 bigint, placed_seq_15 bigint, placed_seq_16 bigint, placed_seq_17 bigint, \
-                  placed_seq_18 bigint, placed_seq_19 bigint, placed_seq_20 bigint, \
-                  total numeric);" ;
+                  seq bigint, total numeric);" ;
        //gain_1 = (total-seq1)
        //gain_1 = (total-seq1) opt_id1_1/seq1
 
       sql << "DROP TABLE IF EXISTS u_scheme_option_summary CASCADE;";
       
       sql << "DROP TABLE IF EXISTS bet CASCADE;";
-      sql << "create table IF NOT EXISTS bet( s_id bigint NOT NULL, opt_id bigint NOT NULL, u_id bigint NOT NULL,  points bigint NOT NULL,\
+      sql << "create table IF NOT EXISTS bet( s_id bigint NOT NULL, opt_id smallint NOT NULL, u_id bigint NOT NULL,  points bigint NOT NULL,\
         bettime timestamp NOT NULL);" ;
+
 
       sql << "DROP TABLE IF EXISTS bonus CASCADE;";
       sql << "create table IF NOT EXISTS bonus( u_id bigint NOT NULL,  points bigint NOT NULL,\
         btime timestamp NOT NULL);" ;
         
-        
-      sql << "DROP TABLE IF EXISTS bet_archive CASCADE;";
-      sql << "create table IF NOT EXISTS  bet_archive( LIKE scheme );" ;
        
+      sql << "DROP TABLE IF EXISTS bet_archive CASCADE;";
+      sql << "create table IF NOT EXISTS  bet_archive( LIKE bet, gain numeric NOT NULL);" ;
+      
+      sql << "DROP TABLE IF EXISTS options_archive CASCADE;";
+      sql << "create table IF NOT EXISTS options_archive(LIKE options);" ;
+      
+      sql << "DROP TABLE  IF EXISTS schemearchive CASCADE;";
+      sql << "create table IF NOT EXISTS schemearchive( LIKE scheme );" ;
 
       sql << "DROP TABLE IF EXISTS finalizebet CASCADE;";
       sql << "create table IF NOT EXISTS finalizebet( s_id bigint NOT NULL, \
       opt_won bigint NOT NULL, \
       finalizetime timestamp NOT NULL);" ;
       
+      CreateGetgain(sql) ;
+
       m_SCreateScheme.reset( new SCreateScheme(*m_sqlptr.get() ) );
       
       m_SCreateBet.reset( new SCreateBet(*m_sqlptr.get() ) );

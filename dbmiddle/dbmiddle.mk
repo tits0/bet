@@ -13,7 +13,7 @@ CurrentFileName        :=
 CurrentFilePath        :=
 CurrentFileFullPath    :=
 User                   :=anandrathi
-Date                   :=01/05/15
+Date                   :=01/22/15
 CodeLitePath           :="/home/anandrathi/.codelite"
 LinkerName             :=/usr/bin/g++ 
 SharedObjectLinkerName :=/usr/bin/g++ -shared -fPIC
@@ -62,7 +62,7 @@ AS       := /usr/bin/as
 CodeLiteDir:=/usr/share/codelite
 LD_LIBRARY_PATH:=./soci/build/lib;../soci/build/lib
 Objects0=$(IntermediateDirectory)/main.cpp$(ObjectSuffix) $(IntermediateDirectory)/pgdbcommon.cpp$(ObjectSuffix) $(IntermediateDirectory)/SCreateScheme.cpp$(ObjectSuffix) $(IntermediateDirectory)/SCreateBet.cpp$(ObjectSuffix) $(IntermediateDirectory)/SFinalizeScheme.cpp$(ObjectSuffix) $(IntermediateDirectory)/SUser.cpp$(ObjectSuffix) $(IntermediateDirectory)/error_codes.cpp$(ObjectSuffix) $(IntermediateDirectory)/UnitTest.cpp$(ObjectSuffix) $(IntermediateDirectory)/LocalCaches.cpp$(ObjectSuffix) $(IntermediateDirectory)/SGetSchemeNOptions.cpp$(ObjectSuffix) \
-	$(IntermediateDirectory)/ConfigLocal.cpp$(ObjectSuffix) $(IntermediateDirectory)/mongoose.c$(ObjectSuffix) $(IntermediateDirectory)/RestAPI.cpp$(ObjectSuffix) $(IntermediateDirectory)/rest_impl.cpp$(ObjectSuffix) 
+	$(IntermediateDirectory)/ConfigLocal.cpp$(ObjectSuffix) $(IntermediateDirectory)/mongoose.c$(ObjectSuffix) $(IntermediateDirectory)/RestAPI.cpp$(ObjectSuffix) $(IntermediateDirectory)/rest_impl.cpp$(ObjectSuffix) $(IntermediateDirectory)/getgainPLSQL.cpp$(ObjectSuffix) 
 
 
 
@@ -200,6 +200,14 @@ $(IntermediateDirectory)/rest_impl.cpp$(DependSuffix): rest_impl.cpp
 
 $(IntermediateDirectory)/rest_impl.cpp$(PreprocessSuffix): rest_impl.cpp
 	@$(CXX) $(CXXFLAGS) $(IncludePCH) $(IncludePath) $(PreprocessOnlySwitch) $(OutputSwitch) $(IntermediateDirectory)/rest_impl.cpp$(PreprocessSuffix) "rest_impl.cpp"
+
+$(IntermediateDirectory)/getgainPLSQL.cpp$(ObjectSuffix): getgainPLSQL.cpp $(IntermediateDirectory)/getgainPLSQL.cpp$(DependSuffix)
+	$(CXX) $(IncludePCH) $(SourceSwitch) "/home/anandrathi/sre/baccount/dbmiddle/getgainPLSQL.cpp" $(CXXFLAGS) $(ObjectSwitch)$(IntermediateDirectory)/getgainPLSQL.cpp$(ObjectSuffix) $(IncludePath)
+$(IntermediateDirectory)/getgainPLSQL.cpp$(DependSuffix): getgainPLSQL.cpp
+	@$(CXX) $(CXXFLAGS) $(IncludePCH) $(IncludePath) -MG -MP -MT$(IntermediateDirectory)/getgainPLSQL.cpp$(ObjectSuffix) -MF$(IntermediateDirectory)/getgainPLSQL.cpp$(DependSuffix) -MM "getgainPLSQL.cpp"
+
+$(IntermediateDirectory)/getgainPLSQL.cpp$(PreprocessSuffix): getgainPLSQL.cpp
+	@$(CXX) $(CXXFLAGS) $(IncludePCH) $(IncludePath) $(PreprocessOnlySwitch) $(OutputSwitch) $(IntermediateDirectory)/getgainPLSQL.cpp$(PreprocessSuffix) "getgainPLSQL.cpp"
 
 
 -include $(IntermediateDirectory)/*$(DependSuffix)

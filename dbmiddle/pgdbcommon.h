@@ -24,18 +24,12 @@ class SCreateScheme {
     std::tm     m_endtime ;
     int64_t     m_usercreated;
     int         m_optseq;
-    //std::string    m_opt_name_01, m_opt_name_02, m_opt_name_03, m_opt_name_04, m_opt_name_05,
-    //               m_opt_name_06, m_opt_name_07, m_opt_name_08, m_opt_name_09, m_opt_name_10,
-    //               m_opt_name_11, m_opt_name_12, m_opt_name_13, m_opt_name_14, m_opt_name_15, 
-    //               m_opt_name_16, m_opt_name_17, m_opt_name_18, m_opt_name_19, m_opt_name_20;
-    std::string   m_opt_name[MAX_OPTS_BACCT];
-    int64_t     m_opt[MAX_OPTS_BACCT];
-    int64_t     m_placed_opt[MAX_OPTS_BACCT];
+    std::string m_optname;
     int64_t     m_sid;
     int64_t     m_total;
     soci::session& m_sql;
     soci::statement m_stCreateScheme;
-    soci::statement m_stCreateSchemeOptSumm;
+    soci::statement m_stInsertOpt;
     soci::indicator m_ind[MAX_OPTS_BACCT];
 public:
     SCreateScheme(soci::session& sqlsession);
@@ -59,17 +53,20 @@ class SCreateBet {
     int64_t  m_approvedby;
     int64_t  m_points;
     std::tm  m_bettime;
+    int64_t  m_total;
     int64_t  m_curr_points; soci::indicator m_curr_points_ind;
     int64_t  m_curr_gain; soci::indicator m_curr_gain_ind;
     int64_t  m_curr_bonus; soci::indicator m_curr_bonus_ind;
     int64_t  m_curr_purchase; soci::indicator m_curr_purchase_ind;
     std::tm  m_curr_lastlogin; soci::indicator m_curr_lastlogin_ind;
+    std::string m_optname;
     soci::session& m_sql;
     soci::statement m_stCreateBet;
     soci::statement m_stSelectUPoints;
     soci::statement m_stUpdateUPoints;
+    soci::statement m_stUpdateOptions;
  
-    boost::shared_ptr<soci::statement> m_stUpdateSumm[MAX_OPTS_BACCT];
+    //boost::shared_ptr<soci::statement> m_stUpdateSumm[MAX_OPTS_BACCT];
     std::string m_update_scheme_option_summary ;
     std::string m_update_scheme_option_summary_where ;
     std::string m_ssql;    
@@ -156,7 +153,7 @@ ERROR_CODES_BACCT  createRow(
 class SGetSchemeNOptions {
     soci::session& m_sql;
     soci::statement m_stSelectScheme;
-    soci::indicator m_ind[MAX_OPTS_BACCT];
+    soci::statement m_stSelectOptions;
     public:
     std::string m_schemename;
     int64_t     m_permission;
@@ -164,13 +161,14 @@ class SGetSchemeNOptions {
     std::tm     m_endtime ;
     int64_t     m_usercreated;
     int         m_optseq;
-    std::string   m_opt_name[MAX_OPTS_BACCT];
-    int64_t     m_opt[MAX_OPTS_BACCT];
-    int64_t     m_placed_opt[MAX_OPTS_BACCT];
+    std::string   m_opt_name;
+    int64_t     m_optid;
+    int64_t     m_placed_opt;
     int64_t     m_sid;
-    int64_t     m_total;
+    int64_t     m_opttotal;
 public:
     SGetSchemeNOptions(soci::session& sqlsession);
+    
     void test(void) { std::cout << " hello \n";  }
     int64_t selectRows(LocalCaches::SSCHEME_OPTIONS* schemeOptions);
     

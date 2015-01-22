@@ -16,36 +16,36 @@ RestAPI::~RestAPI()
 }
 
 int RestAPI::handle_restful_call(struct mg_connection *conn, enum mg_event ev) {
-  char n1[100], n2[100];
-  Json::Value root;  
+  char cjsondata[4024] ;
+  int readSize=0;
+  Json::Value root;
   switch (ev) {
     case MG_AUTH: return MG_TRUE;
     case MG_REQUEST:
         std::cout << "calling uri:" << conn->uri << std::endl;
+        // Read POST data
+        int post_data_len;
+        mg_get_var(conn, "req", cjsondata, sizeof(cjsondata));
+        
           if (!strcmp(conn->uri, CREATEBET)) {
-              this->createBet(root);
+              this->createBet(cjsondata, root);
               return MG_TRUE;
           } else if (!strcmp(conn->uri, CREATESCHEME)) {
-              this->createScheme(root);
+              this->createScheme(cjsondata, root);
               return MG_TRUE;
           } else if (!strcmp(conn->uri, GETFULLSCHEMEOPTIONNAMESID)) {
-              this->getFullSchemeOptionNamesID(root);
+              this->getFullSchemeOptionNamesID(cjsondata, root);
               return MG_TRUE;
           } else if (!strcmp(conn->uri, GETPOINTS)) {
-              this->getPoints(root);
+              this->getPoints(cjsondata, root);
               return MG_TRUE;
-          } 
+          }
       mg_send_file(conn, "index.html", s_no_cache_header);
       return MG_MORE;
     default: return MG_FALSE;
   }
 
-
-  // Get form variables
-  mg_get_var(conn, "n1", n1, sizeof(n1));
-  mg_get_var(conn, "n2", n2, sizeof(n2));
-
-  mg_printf_data(conn, "{ \"result\": %lf }", strtod(n1, NULL) + strtod(n2, NULL));
+  mg_printf_data(conn, "{ \"result\": %s }",  root.asCString() );
 }
 
 

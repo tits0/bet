@@ -6,8 +6,7 @@ SFinalizeScheme::SFinalizeScheme(soci::session& sqlsession):m_sql(sqlsession), m
     {
         m_stFinalizeScheme =  (m_sql.prepare <<
         "insert into finalizebet( s_id, \
-        opt_won,  opt_of_user, u_id, \
-        points_invested, gain, finalizetime ) \
+        opt_won,  finalizetime ) \
         values ( :schemeid, :optionwon, :finalizetime );" , 
         soci::use( m_scheme_id, "schemeid"), 
         soci::use(m_optionwon, "optionwon"), 
