@@ -1,0 +1,3 @@
+make placebet as plpgsql
+add total in scheme table
+update scheme total in placebet

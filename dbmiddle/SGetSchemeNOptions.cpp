@@ -66,7 +66,7 @@ int64_t SGetSchemeNOptions::selectRows(LocalCaches::SSCHEME_OPTIONS* schemeOptio
                 std::cout << "m_opt_name=" <<m_opt_name << " :m_optid=" << m_optid << " :m_sid=" << m_sid << std::endl;
                 opts[m_opt_name]=topts;
                 
-            }while (m_stSelectOptions.fetch());
+            } while (m_stSelectOptions.fetch());
             (*schemeOptions)[it->first].setOptList(opts);
         }  
 

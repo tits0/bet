@@ -45,9 +45,11 @@
     <File Name="RestAPI.cpp"/>
     <File Name="rest_impl.cpp"/>
     <File Name="getgainPLSQL.cpp"/>
+    <File Name="pgsql.sql"/>
   </VirtualDirectory>
   <VirtualDirectory Name="doc">
     <File Name="config.txt"/>
+    <File Name="TODO.txt"/>
   </VirtualDirectory>
   <Settings Type="Executable">
     <GlobalSettings>

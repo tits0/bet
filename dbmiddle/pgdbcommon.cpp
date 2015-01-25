@@ -75,8 +75,8 @@ ERROR_CODES_BACCT pgdbcommon::createInitialScheme()
       sql << "DROP TABLE IF EXISTS scheme CASCADE;";
       sql << "create table IF NOT EXISTS scheme( s_id bigserial, scheme_name varchar NOT NULL, permission integer, \
         createtime timestamp NOT NULL, endtime timestamp NOT NULL, uid_created bigint NOT NULL, \
-       options integer DEFAULT 0, total numeric NOT NULL DEFAULT 0,\
-       isarchived smallint );" ;
+       options integer DEFAULT 0, total numeric NOT NULL DEFAULT 0, \
+       placed bigint NOT NULL, isarchived smallint );" ;
 
       sql << "DROP TABLE IF EXISTS options CASCADE;";
       sql << "create table IF NOT EXISTS options(s_id bigint, opt_id integer, opt_name varchar NOT NULL, \
