@@ -60,6 +60,8 @@ bool pgdbcommon::chkInit()
 
 //declare a function used in createInitialScheme
 ERROR_CODES_BACCT CreateGetgain(soci::session& sql);
+ERROR_CODES_BACCT CreatePlaceBet(soci::session& sql);
+ERROR_CODES_BACCT CreateCalculateRewards(soci::session& sql);
 
 ERROR_CODES_BACCT pgdbcommon::createInitialScheme()
 {
@@ -99,7 +101,6 @@ ERROR_CODES_BACCT pgdbcommon::createInitialScheme()
       sql << "DROP TABLE IF EXISTS bonus CASCADE;";
       sql << "create table IF NOT EXISTS bonus( u_id bigint NOT NULL,  points bigint NOT NULL,\
         btime timestamp NOT NULL);" ;
-        
        
       sql << "DROP TABLE IF EXISTS bet_archive CASCADE;";
       sql << "create table IF NOT EXISTS  bet_archive( LIKE bet, gain numeric NOT NULL);" ;
@@ -115,7 +116,10 @@ ERROR_CODES_BACCT pgdbcommon::createInitialScheme()
       opt_won bigint NOT NULL, \
       finalizetime timestamp NOT NULL);" ;
       
-      CreateGetgain(sql) ;
+      ERROR_CODES_BACCT ret=ERROR_OTHER; 
+      ret=CreateGetgain(sql);
+      ret=CreateCalculateRewards(sql);  
+      ret=CreatePlaceBet(sql);
 
       m_SCreateScheme.reset( new SCreateScheme(*m_sqlptr.get() ) );
       

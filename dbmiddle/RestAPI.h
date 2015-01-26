@@ -22,6 +22,7 @@ public:
     ERROR_CODES_BACCT createBet(const char* input, Json::Value& root);
     ERROR_CODES_BACCT getFullSchemeOptionNamesID(const char* input, Json::Value& root);
     ERROR_CODES_BACCT getPoints(const char* input, Json::Value& root);
+    ERROR_CODES_BACCT createUser(const char* input, Json::Value& root);
     
 };
 

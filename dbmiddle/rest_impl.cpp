@@ -47,18 +47,78 @@ ERROR_CODES_BACCT RestAPI::createScheme(const char* input, Json::Value& root)
 
 ERROR_CODES_BACCT RestAPI::createBet(const char* input, Json::Value& root)
 {
+    pgdbcommon* pPgdbcommon = pgdbcommon::GetInstance();
+ 
+    boost::posix_time::ptime createdTime = boost::posix_time::second_clock::universal_time();
+    std::cout << "createdTime:" << createdTime << std::endl;
+    boost::posix_time::ptime endtimecal(createdTime);
+    std::cout << "endtimecal date:" << endtimecal << std::endl;
+    endtimecal = endtimecal +  boost::gregorian::days(0) + boost::posix_time::hours(1);
+    std::cout << "endtimecal date+hour:" << endtimecal << std::endl;
+
+    std::cout << "endtimecal:" << endtimecal << std::endl;
+    
+    Json::Value optdata ;
+    ERROR_CODES_BACCT ret = ERROR_OTHER;
+    optdata = this->testparseJSON(input);
+
+    Json::Value schemeIdVal = optdata[SCHEME_ID_TAG_BACCT];
+    Json::Value optidVal = optdata[OPTION_ID_TAG_BACCT]; 
+    Json::Value userVal = optdata[UID_TAG_BACCT]; 
+    Json::Value  pointsVal = optdata[BET_POINTS_TAG_BACCT]; 
+    
+    int64_t scheme_id=schemeIdVal.asInt64();
+    int64_t opt_id =optidVal.asInt64();
+    int64_t user = userVal.asInt64();
+    int64_t approvedby = 0;
+    long   points = pointsVal.asInt64();
+    std::tm bettime = boost::posix_time::to_tm(endtimecal);
+    ret = pPgdbcommon->createBet( 
+     scheme_id,
+    opt_id,
+    user,
+    approvedby,
+    points,
+    bettime );
     
     return ERROR_CODES_BACCT::ERROR_OK;
 }
 
 ERROR_CODES_BACCT RestAPI::getFullSchemeOptionNamesID(const char* input, Json::Value& root)
 {
+    pgdbcommon* pPgdbcommon = pgdbcommon::GetInstance();
+ 
+    boost::posix_time::ptime createdTime = boost::posix_time::second_clock::universal_time();
+    std::cout << "createdTime:" << createdTime << std::endl;
+    boost::posix_time::ptime endtimecal(createdTime);
+    std::cout << "endtimecal date:" << endtimecal << std::endl;
+    endtimecal = endtimecal +  boost::gregorian::days(0) + boost::posix_time::hours(1);
+    std::cout << "endtimecal date+hour:" << endtimecal << std::endl;
+
+    std::cout << "endtimecal:" << endtimecal << std::endl;
     
-    return ERROR_CODES_BACCT::ERROR_OK;
+    ERROR_CODES_BACCT ret = ERROR_OTHER;
+    ret = pPgdbcommon->getFullSchemeOptionNamesID(root);
+
+    std::cout << " Full scheme:options" << root  << std::endl;
+    
+    return ret ;
+    
 }
 
 ERROR_CODES_BACCT RestAPI::getPoints(const char* input, Json::Value& root)
 {
-    
     return ERROR_CODES_BACCT::ERROR_OK;
 }
+
+
+ERROR_CODES_BACCT RestAPI::createUser(const char* input, Json::Value& root)
+{
+    return ERROR_CODES_BACCT::ERROR_OK;
+}
+
+//ERROR_CODES_BACCT RestAPI::x(const char* input, Json::Value& root)
+//{
+//    return ERROR_CODES_BACCT::ERROR_OK;
+//}
+

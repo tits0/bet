@@ -39,7 +39,11 @@ int RestAPI::handle_restful_call(struct mg_connection *conn, enum mg_event ev) {
           } else if (!strcmp(conn->uri, GETPOINTS)) {
               this->getPoints(cjsondata, root);
               return MG_TRUE;
+          } else if (!strcmp(conn->uri, NEWUSER)) {
+              this->getPoints(cjsondata, root);
+              return MG_TRUE;
           }
+          
       mg_send_file(conn, "index.html", s_no_cache_header);
       return MG_MORE;
     default: return MG_FALSE;

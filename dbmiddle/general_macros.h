@@ -8,6 +8,7 @@
 #define CREATEBET "/api/newbet"
 #define GETFULLSCHEMEOPTIONNAMESID "/api/schemes"
 #define GETPOINTS "/api/getpoints"
+#define NEWUSER "/api/newuser"
 
 #define UID_TAG_BACCT  "uid"
 #define SESSION_TAG_BACCT  "session"
