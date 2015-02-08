@@ -51,6 +51,18 @@
     <File Name="config.txt"/>
     <File Name="TODO.txt"/>
   </VirtualDirectory>
+  <VirtualDirectory Name="header">
+    <File Name="ConfigLocal.h"/>
+    <File Name="error_codes.h"/>
+    <File Name="LocalCaches.h"/>
+    <File Name="pgdbcommon.h"/>
+    <File Name="general_macros.h"/>
+    <File Name="mongoose.h"/>
+  </VirtualDirectory>
+  <VirtualDirectory Name="PyTest">
+    <File Name="PyTest/SmokeTest.py"/>
+    <File Name="PyTest/TestHelper.py"/>
+  </VirtualDirectory>
   <Settings Type="Executable">
     <GlobalSettings>
       <Compiler Options="" C_Options="" Assembler="">
@@ -76,11 +88,12 @@
         <Library Value="soci_postgresql"/>
         <Library Value="libjsoncpp.a"/>
         <Library Value="boost_date_time"/>
+        <Library Value="boost_program_options"/>
       </Linker>
       <ResourceCompiler Options="" Required="no"/>
       <General OutputFile="$(IntermediateDirectory)/$(ProjectName)" IntermediateDirectory="./Debug" Command="./$(ProjectName)" CommandArguments="" UseSeparateDebugArgs="no" DebugArguments="" WorkingDirectory="$(IntermediateDirectory)" PauseExecWhenProcTerminates="yes" IsGUIProgram="no" IsEnabled="yes"/>
       <Environment EnvVarSetName="&lt;Use Defaults&gt;" DbgSetName="&lt;Use Defaults&gt;">
-        <![CDATA[LD_LIBRARY_PATH=./soci/build/lib;../soci/build/lib]]>
+        <![CDATA[LD_LIBRARY_PATH=./soci/build/lib:../soci/build/lib]]>
       </Environment>
       <Debugger IsRemote="no" RemoteHostName="" RemoteHostPort="" DebuggerPath="" IsExtended="yes">
         <DebuggerSearchPaths/>
@@ -150,12 +163,4 @@
       </Completion>
     </Configuration>
   </Settings>
-  <VirtualDirectory Name="header">
-    <File Name="ConfigLocal.h"/>
-    <File Name="error_codes.h"/>
-    <File Name="LocalCaches.h"/>
-    <File Name="pgdbcommon.h"/>
-    <File Name="general_macros.h"/>
-    <File Name="mongoose.h"/>
-  </VirtualDirectory>
 </CodeLite_Project>

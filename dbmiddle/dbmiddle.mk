@@ -13,7 +13,7 @@ CurrentFileName        :=
 CurrentFilePath        :=
 CurrentFileFullPath    :=
 User                   :=anandrathi
-Date                   :=01/26/15
+Date                   :=02/08/15
 CodeLitePath           :="/home/anandrathi/.codelite"
 LinkerName             :=/usr/bin/g++ 
 SharedObjectLinkerName :=/usr/bin/g++ -shared -fPIC
@@ -39,8 +39,8 @@ LinkOptions            :=
 IncludePath            :=  $(IncludeSwitch). $(IncludeSwitch). $(IncludeSwitch)./soci/ $(IncludeSwitch)./soci/core/ $(IncludeSwitch)./jsoncpp/include 
 IncludePCH             := 
 RcIncludePath          := 
-Libs                   := $(LibrarySwitch)soci_core $(LibrarySwitch)soci_mysql $(LibrarySwitch)soci_postgresql $(LibrarySwitch)jsoncpp $(LibrarySwitch)boost_date_time 
-ArLibs                 :=  "soci_core" "soci_mysql" "soci_postgresql" "libjsoncpp.a" "boost_date_time" 
+Libs                   := $(LibrarySwitch)soci_core $(LibrarySwitch)soci_mysql $(LibrarySwitch)soci_postgresql $(LibrarySwitch)jsoncpp $(LibrarySwitch)boost_date_time $(LibrarySwitch)boost_program_options 
+ArLibs                 :=  "soci_core" "soci_mysql" "soci_postgresql" "libjsoncpp.a" "boost_date_time" "boost_program_options" 
 LibPath                := $(LibraryPathSwitch). $(LibraryPathSwitch)./soci/build/lib $(LibraryPathSwitch)./jsoncpp/build/lib 
 
 ##
@@ -60,7 +60,7 @@ AS       := /usr/bin/as
 ## User defined environment variables
 ##
 CodeLiteDir:=/usr/share/codelite
-LD_LIBRARY_PATH:=./soci/build/lib;../soci/build/lib
+LD_LIBRARY_PATH:=./soci/build/lib:../soci/build/lib
 Objects0=$(IntermediateDirectory)/main.cpp$(ObjectSuffix) $(IntermediateDirectory)/pgdbcommon.cpp$(ObjectSuffix) $(IntermediateDirectory)/SCreateScheme.cpp$(ObjectSuffix) $(IntermediateDirectory)/SCreateBet.cpp$(ObjectSuffix) $(IntermediateDirectory)/SFinalizeScheme.cpp$(ObjectSuffix) $(IntermediateDirectory)/SUser.cpp$(ObjectSuffix) $(IntermediateDirectory)/error_codes.cpp$(ObjectSuffix) $(IntermediateDirectory)/UnitTest.cpp$(ObjectSuffix) $(IntermediateDirectory)/LocalCaches.cpp$(ObjectSuffix) $(IntermediateDirectory)/SGetSchemeNOptions.cpp$(ObjectSuffix) \
 	$(IntermediateDirectory)/ConfigLocal.cpp$(ObjectSuffix) $(IntermediateDirectory)/mongoose.c$(ObjectSuffix) $(IntermediateDirectory)/RestAPI.cpp$(ObjectSuffix) $(IntermediateDirectory)/rest_impl.cpp$(ObjectSuffix) $(IntermediateDirectory)/getgainPLSQL.cpp$(ObjectSuffix) 
 

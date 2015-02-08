@@ -80,8 +80,7 @@ ERROR_CODES_BACCT RestAPI::createBet(const char* input, Json::Value& root)
     approvedby,
     points,
     bettime );
-    
-    return ERROR_CODES_BACCT::ERROR_OK;
+    return ret;
 }
 
 ERROR_CODES_BACCT RestAPI::getFullSchemeOptionNamesID(const char* input, Json::Value& root)
@@ -114,7 +113,50 @@ ERROR_CODES_BACCT RestAPI::getPoints(const char* input, Json::Value& root)
 
 ERROR_CODES_BACCT RestAPI::createUser(const char* input, Json::Value& root)
 {
-    return ERROR_CODES_BACCT::ERROR_OK;
+    pgdbcommon* pPgdbcommon = pgdbcommon::GetInstance();
+ 
+    boost::posix_time::ptime createdTime = boost::posix_time::second_clock::universal_time();
+    std::cout << "createdTime:" << createdTime << std::endl;
+    boost::posix_time::ptime endtimecal(createdTime);
+    std::cout << "endtimecal date:" << endtimecal << std::endl;
+    endtimecal = endtimecal +  boost::gregorian::days(0) + boost::posix_time::hours(1);
+    std::cout << "endtimecal date+hour:" << endtimecal << std::endl;
+
+    std::cout << "endtimecal:" << endtimecal << std::endl;
+    
+    Json::Value optdata ;
+    ERROR_CODES_BACCT ret = ERROR_OTHER;
+    
+    optdata = this->testparseJSON(input);
+
+    Json::Value unameVal = optdata[OPTIONS_UNAME_BACCT];
+    Json::Value passVal = optdata[OPTIONS_PASS_BACCT]; 
+    Json::Value addrVal = optdata[OPTIONS_ADDR_BACCT]; 
+    
+    std::string username=unameVal.asCString();
+    std::string pass=passVal.asCString();
+    std::string address= addrVal.asCString();
+    std::tm jointime= boost::posix_time::to_tm(endtimecal);
+    std::tm lastlogintime= boost::posix_time::to_tm(endtimecal);
+
+    int64_t  points=0;
+    int64_t  gain=0, uid;
+    
+    Json::Value retroot;
+    ret = pPgdbcommon->createuser(
+                    username,
+                    address,
+                    pass,
+                    points,
+                    gain,
+                    jointime,
+                    lastlogintime,
+                    uid
+                    );
+
+    retroot[UID_TAG_BACCT] = (Json::Int64)uid;
+    std::cout << "User ID: " << uid;
+    return ret;
 }
 
 //ERROR_CODES_BACCT RestAPI::x(const char* input, Json::Value& root)
