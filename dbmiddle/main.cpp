@@ -2,6 +2,9 @@
 #include "pgdbcommon.h"
 #include "ConfigLocal.h"
 #include <boost/program_options.hpp>
+#include "RestAPI.h"
+#include "logger.h"
+
 namespace po = boost::program_options;
 int testdbmain(int argc, char **argv)
 {
@@ -15,11 +18,14 @@ int main(int argc, char **argv)
 {
     int initdb=0;
     int dryrun=0;
+    
     ConfigLocal::Instance()->readConfigFile();
+    logger::Instance()->
     po::options_description desc("Allowed options");
     desc.add_options()
         ("help", "produce help message")
         ("initdb", "Initialize database")
+        ("server", "run http server")
         ("dryrun", "dry run");
  
     po::variables_map vm; 
@@ -39,7 +45,6 @@ int main(int argc, char **argv)
  
       /** --initdb option 
        */ 
-      std::cout << "initdb " << vm.count("initdb")  << std::endl ;
       if ( vm.count("initdb")  ) 
       {
         std::cout << "initdb test.testCreateInitialScheme()" << map_error(test.testCreateInitialScheme()) << std::endl;
@@ -48,7 +53,6 @@ int main(int argc, char **argv)
 
        /** --test option 
        */ 
-      std::cout << "dryrun " << vm.count("dryrun")  << std::endl ;
       if ( vm.count("dryrun")  ) 
       {
         std::cout << "dryrun\n"  << std::endl;
@@ -58,6 +62,16 @@ int main(int argc, char **argv)
         std::cout << "test.testCreateBet()" << map_error(test.testCreateBet()) << std::endl;
         std::cout << "test.testCreateUser()" << map_error(test.testCreateUser()) << std::endl;
         std::cout << "test.testCreateBet()" << map_error(test.testCreateBet()) << std::endl;
+        return ERROR_OK;
+      }
+
+       /** --test option 
+       */ 
+      if ( vm.count("server")  ) 
+      {
+        std::cout << "run server\n"  << std::endl;
+        RestAPI server;
+        server.RunRestServer();
         return ERROR_OK;
       }
 

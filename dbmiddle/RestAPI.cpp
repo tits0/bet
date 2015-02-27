@@ -60,7 +60,7 @@ static int ev_handler(struct mg_connection *conn, enum mg_event ev) {
     
 }
 
-int RestAPI::RestServer(void) {
+int RestAPI::RunRestServer(void) {
 
   // Create and configure the server
   m_server = mg_create_server(this, ev_handler);

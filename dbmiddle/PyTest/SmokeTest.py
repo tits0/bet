@@ -5,10 +5,11 @@ import json
 #import RedisConn
 import TestHelper
 
+
 class TestDB(unittest.TestCase):
+
     def setUp(self):
-        #if TestDB.isConn==False:
-        self.dbinit()
+        self.dbConnect()
         if isOneTime==False:
             TestDB.isConn=True
             
@@ -16,7 +17,18 @@ class TestDB(unittest.TestCase):
         conn = psycopg2.connect("dbname='%s' user='%s'  password='%s'" % (self.dbname, self.user, self.password))
         return conn
 
-    def dbinit(self, dbname='accountdb', user='anandrathi', password='guru123'):
+    def work(cmd):
+        return subprocess.call(cmd, shell=False)
+
+    def startServer():
+        self.process = Process(work, ["../Debug/dbmiddle", "--server"] )
+        self.process.start()
+        
+    def stopServer():
+        if startServer.is_alive():
+            self.process.terminate()
+
+    def dbConnect(self, dbname='accountdb', user='anandrathi', password='guru123'):
         self.dbname=dbname
         self.user=user
         self.password=password
@@ -26,7 +38,7 @@ class TestDB(unittest.TestCase):
         pass
 
     def test_01_CreateInitialScheme(self):
-        TestHelper.initdb()
+        TestHelper.dbConnect()
         self.assertTrue(TestHelper.checkTableExists(conn=self.conn, sch_str='public', table_str='bet' ), "Error: Table bet not found" )
         self.assertTrue(TestHelper.checkTableExists(conn=self.conn, sch_str='public', table_str='scheme' ), "Error: Table scheme not found" )
         self.assertTrue(TestHelper.checkTableExists(conn=self.conn, sch_str='public', table_str='options' ), "Error: Table options not found" )
@@ -38,10 +50,25 @@ class TestDB(unittest.TestCase):
         self.assertTrue(TestHelper.checkTableExists(conn=self.conn, sch_str='public', table_str='finalizebet' ), "Error: Table finalizebet not found" )
 
     def test_02_checkSchemeTable(self):
-        TestHelper.initdb()
+        TestHelper.dbConnect()
+        try:
+            self.startServer()
+            rows = TestHelper.checkSchemeTable(conn=self.conn, scheme_name='s3', options=2, total=0)
+            self.assertTrue(len(rows)==1, "Error: no rows not found" )
+            self.stopServer()
+        except Exception e:
+            self.assertTrue( False, "Error: %s" % str(e) )
+            
+    def test_03_checkSchemeTable(self):
+        TestHelper.dbConnect()
         rows = TestHelper.checkSchemeTable(conn=self.conn, scheme_name='s3', options=2, total=0)
         self.assertTrue(len(rows)==1, "Error: no rows not found" )
-        
+
+    def test_04_checkSchemeTable(self):
+        TestHelper.dbConnect()
+        rows = TestHelper.checkSchemeTable(conn=self.conn, scheme_name='s3', options=2, total=0)
+        self.assertTrue(len(rows)==1, "Error: no rows not found" )
+
 
 if __name__ == '__main__':
     unittest.main()

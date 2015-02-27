@@ -41,15 +41,17 @@
     <File Name="SGetSchemeNOptions.cpp"/>
     <File Name="ConfigLocal.cpp"/>
     <File Name="mongoose.c"/>
-    <File Name="RestAPI.h"/>
     <File Name="RestAPI.cpp"/>
     <File Name="rest_impl.cpp"/>
     <File Name="getgainPLSQL.cpp"/>
     <File Name="pgsql.sql"/>
+    <File Name="PyTest/TestHelper.py"/>
+    <File Name="logger.cpp"/>
   </VirtualDirectory>
   <VirtualDirectory Name="doc">
     <File Name="config.txt"/>
     <File Name="TODO.txt"/>
+    <File Name="log.conf"/>
   </VirtualDirectory>
   <VirtualDirectory Name="header">
     <File Name="ConfigLocal.h"/>
@@ -58,10 +60,12 @@
     <File Name="pgdbcommon.h"/>
     <File Name="general_macros.h"/>
     <File Name="mongoose.h"/>
+    <File Name="logger.h"/>
+    <File Name="RestAPI.h"/>
+    <File Name="easylogging++.h"/>
   </VirtualDirectory>
   <VirtualDirectory Name="PyTest">
     <File Name="PyTest/SmokeTest.py"/>
-    <File Name="PyTest/TestHelper.py"/>
   </VirtualDirectory>
   <Settings Type="Executable">
     <GlobalSettings>
