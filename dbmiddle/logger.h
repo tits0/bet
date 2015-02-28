@@ -3,6 +3,14 @@
 
 #include "easylogging++.h"
 
+/*
+INFO (LOG_INFO)
+DEBUG (LOG_DEBUG)
+WARNING (LOG_WARNING)
+ERROR (LOG_ERR)
+FATAL (LOG_EMERG)
+*/
+
 using namespace el;
 using namespace el::base;
 using namespace el::base::utils;
@@ -16,10 +24,10 @@ private:
     logger(const logger& rhs);
     logger& operator=(const logger& rhs);
     int Init();
-    void Dump();
 public:
     static logger* Instance();
     static void Release();
+    int Dump();
     
 private:
     logger();

@@ -20,7 +20,7 @@ int main(int argc, char **argv)
     int dryrun=0;
     
     ConfigLocal::Instance()->readConfigFile();
-    logger::Instance()->
+    logger::Instance()->Dump();
     po::options_description desc("Allowed options");
     desc.add_options()
         ("help", "produce help message")
@@ -38,7 +38,7 @@ int main(int argc, char **argv)
        */ 
       if ( vm.count("help")  ) 
       { 
-        std::cout << "Command Line " << std::endl 
+        LOG(INFO) << "Command Line " << std::endl 
                   << desc << std::endl; 
         return ERROR_OK; 
       } 
@@ -47,7 +47,7 @@ int main(int argc, char **argv)
        */ 
       if ( vm.count("initdb")  ) 
       {
-        std::cout << "initdb test.testCreateInitialScheme()" << map_error(test.testCreateInitialScheme()) << std::endl;
+        LOG(INFO) << "initdb test.testCreateInitialScheme()" << map_error(test.testCreateInitialScheme()) << std::endl;
         return ERROR_OK;
       }
 
@@ -55,13 +55,13 @@ int main(int argc, char **argv)
        */ 
       if ( vm.count("dryrun")  ) 
       {
-        std::cout << "dryrun\n"  << std::endl;
-        std::cout << "test.testCreateInitialScheme()" << map_error(test.testCreateInitialScheme()) << std::endl;
-        std::cout << "test.testCreateScheme()" << map_error(test.testCreateScheme()) << std::endl;
-        std::cout << "test.testGetSchemeOptList()" << map_error(test.testGetSchemeOptList()) << std::endl;
-        std::cout << "test.testCreateBet()" << map_error(test.testCreateBet()) << std::endl;
-        std::cout << "test.testCreateUser()" << map_error(test.testCreateUser()) << std::endl;
-        std::cout << "test.testCreateBet()" << map_error(test.testCreateBet()) << std::endl;
+        LOG(INFO) << "dryrun\n"  << std::endl;
+        LOG(INFO) << "test.testCreateInitialScheme()" << map_error(test.testCreateInitialScheme()) << std::endl;
+        LOG(INFO) << "test.testCreateScheme()" << map_error(test.testCreateScheme()) << std::endl;
+        LOG(INFO) << "test.testGetSchemeOptList()" << map_error(test.testGetSchemeOptList()) << std::endl;
+        LOG(INFO) << "test.testCreateBet()" << map_error(test.testCreateBet()) << std::endl;
+        LOG(INFO) << "test.testCreateUser()" << map_error(test.testCreateUser()) << std::endl;
+        LOG(INFO) << "test.testCreateBet()" << map_error(test.testCreateBet()) << std::endl;
         return ERROR_OK;
       }
 
@@ -69,7 +69,7 @@ int main(int argc, char **argv)
        */ 
       if ( vm.count("server")  ) 
       {
-        std::cout << "run server\n"  << std::endl;
+        LOG(INFO) << "run server\n"  << std::endl;
         RestAPI server;
         server.RunRestServer();
         return ERROR_OK;

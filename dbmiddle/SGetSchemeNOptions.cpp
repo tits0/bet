@@ -1,4 +1,5 @@
 #include "pgdbcommon.h"
+#include "logger.h"
 
 SGetSchemeNOptions::SGetSchemeNOptions(soci::session& sqlsession):m_sql(sqlsession), m_stSelectScheme(m_sql) ,
 m_stSelectOptions(m_sql)
@@ -63,7 +64,7 @@ int64_t SGetSchemeNOptions::selectRows(LocalCaches::SSCHEME_OPTIONS* schemeOptio
             {
                 topts.optId=m_optid;    
                 topts.optPoints=m_opttotal;
-                std::cout << "m_opt_name=" <<m_opt_name << " :m_optid=" << m_optid << " :m_sid=" << m_sid << std::endl;
+                LOG(INFO) << "m_opt_name=" <<m_opt_name << " :m_optid=" << m_optid << " :m_sid=" << m_sid << std::endl;
                 opts[m_opt_name]=topts;
                 
             } while (m_stSelectOptions.fetch());

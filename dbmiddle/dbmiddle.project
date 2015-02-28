@@ -45,7 +45,6 @@
     <File Name="rest_impl.cpp"/>
     <File Name="getgainPLSQL.cpp"/>
     <File Name="pgsql.sql"/>
-    <File Name="PyTest/TestHelper.py"/>
     <File Name="logger.cpp"/>
   </VirtualDirectory>
   <VirtualDirectory Name="doc">
@@ -66,6 +65,7 @@
   </VirtualDirectory>
   <VirtualDirectory Name="PyTest">
     <File Name="PyTest/SmokeTest.py"/>
+    <File Name="PyTest/TestHelper.py"/>
   </VirtualDirectory>
   <Settings Type="Executable">
     <GlobalSettings>
@@ -78,7 +78,7 @@
       <ResourceCompiler Options=""/>
     </GlobalSettings>
     <Configuration Name="Debug" CompilerType="GCC" DebuggerType="GNU gdb debugger" Type="Executable" BuildCmpWithGlobalSettings="append" BuildLnkWithGlobalSettings="append" BuildResWithGlobalSettings="append">
-      <Compiler Options="-g;-O0;-std=c++11;-Wall" C_Options="-g;-O0;-Wall" Assembler="" Required="yes" PreCompiledHeader="" PCHInCommandLine="no" PCHFlags="" PCHFlagsPolicy="0">
+      <Compiler Options="-g;-O0;-std=c++11;-Wall;-fPIC" C_Options="-g;-O0;-Wall" Assembler="" Required="yes" PreCompiledHeader="" PCHInCommandLine="no" PCHFlags="" PCHFlagsPolicy="0">
         <IncludePath Value="."/>
         <IncludePath Value="./soci/"/>
         <IncludePath Value="./soci/core/"/>
@@ -93,6 +93,7 @@
         <Library Value="libjsoncpp.a"/>
         <Library Value="boost_date_time"/>
         <Library Value="boost_program_options"/>
+        <Library Value="pthread"/>
       </Linker>
       <ResourceCompiler Options="" Required="no"/>
       <General OutputFile="$(IntermediateDirectory)/$(ProjectName)" IntermediateDirectory="./Debug" Command="./$(ProjectName)" CommandArguments="" UseSeparateDebugArgs="no" DebugArguments="" WorkingDirectory="$(IntermediateDirectory)" PauseExecWhenProcTerminates="yes" IsGUIProgram="no" IsEnabled="yes"/>
@@ -128,11 +129,21 @@
       </Completion>
     </Configuration>
     <Configuration Name="Release" CompilerType="GCC" DebuggerType="GNU gdb debugger" Type="Executable" BuildCmpWithGlobalSettings="append" BuildLnkWithGlobalSettings="append" BuildResWithGlobalSettings="append">
-      <Compiler Options="-O2;-std=c++11;-Wall" C_Options="-O2;-Wall" Assembler="" Required="yes" PreCompiledHeader="" PCHInCommandLine="no" PCHFlags="" PCHFlagsPolicy="0">
+      <Compiler Options="-g;-O0;-std=c++11;-Wall;-fPIC" C_Options="-O2;-Wall" Assembler="" Required="yes" PreCompiledHeader="" PCHInCommandLine="no" PCHFlags="" PCHFlagsPolicy="0">
         <IncludePath Value="."/>
         <Preprocessor Value="NDEBUG"/>
       </Compiler>
-      <Linker Options="" Required="yes"/>
+      <Linker Options="" Required="yes">
+        <LibraryPath Value="./soci/build/lib"/>
+        <LibraryPath Value="./jsoncpp/build/lib"/>
+        <Library Value="soci_core"/>
+        <Library Value="soci_mysql"/>
+        <Library Value="soci_postgresql"/>
+        <Library Value="libjsoncpp.a"/>
+        <Library Value="boost_date_time"/>
+        <Library Value="boost_program_options"/>
+        <Library Value="pthread"/>
+      </Linker>
       <ResourceCompiler Options="" Required="no"/>
       <General OutputFile="$(IntermediateDirectory)/$(ProjectName)" IntermediateDirectory="./Release" Command="./$(ProjectName)" CommandArguments="" UseSeparateDebugArgs="no" DebugArguments="" WorkingDirectory="$(IntermediateDirectory)" PauseExecWhenProcTerminates="yes" IsGUIProgram="no" IsEnabled="yes"/>
       <Environment EnvVarSetName="&lt;Use Defaults&gt;" DbgSetName="&lt;Use Defaults&gt;">

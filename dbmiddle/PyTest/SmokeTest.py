@@ -38,6 +38,7 @@ class TestDB(unittest.TestCase):
         pass
 
     def test_01_CreateInitialScheme(self):
+        import pdb; pdb.set_trace()
         TestHelper.dbConnect()
         self.assertTrue(TestHelper.checkTableExists(conn=self.conn, sch_str='public', table_str='bet' ), "Error: Table bet not found" )
         self.assertTrue(TestHelper.checkTableExists(conn=self.conn, sch_str='public', table_str='scheme' ), "Error: Table scheme not found" )

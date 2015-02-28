@@ -1,6 +1,8 @@
 
 #include "pgdbcommon.h"
 #include "general_macros.h"
+#include "logger.h"
+
 
 const char* sjson_0="{\"uid\":12345567, \"session\":\"7654321\" , \"scheme\":\"s1\", \"options\":[] }";
 const char* sjson_1="{\"uid\":12345567, \"session\":\"7654321\" , \"scheme\":\"s2\", \"options\":[\"opt1\"] }";
@@ -62,13 +64,13 @@ ERROR_CODES_BACCT testpgdbcommon::testCreateInitialScheme() {
     pgdbcommon* pPgdbcommon  =  pgdbcommon::GetInstance();
  
     boost::posix_time::ptime createdTime = boost::posix_time::second_clock::universal_time();
-    std::cout << "createdTime:" << createdTime << std::endl;
+    LOG(INFO) << "createdTime:" << createdTime << std::endl;
     boost::posix_time::ptime endtimecal(createdTime);
-    std::cout << "endtimecal date:" << endtimecal << std::endl;
+    LOG(INFO) << "endtimecal date:" << endtimecal << std::endl;
     endtimecal = endtimecal +  boost::gregorian::days(0) + boost::posix_time::hours(1);
-    std::cout << "endtimecal date+hour:" << endtimecal << std::endl;
+    LOG(INFO) << "endtimecal date+hour:" << endtimecal << std::endl;
 
-    std::cout << "endtimecal:" << endtimecal << std::endl;
+    LOG(INFO) << "endtimecal:" << endtimecal << std::endl;
     
     return pPgdbcommon->createInitialScheme();
 }
@@ -76,15 +78,15 @@ ERROR_CODES_BACCT testpgdbcommon::testCreateInitialScheme() {
 //Test creating scheme with options
 ERROR_CODES_BACCT testpgdbcommon::testCreateScheme() {
     pgdbcommon* pPgdbcommon = pgdbcommon::GetInstance();
- 
+     
     boost::posix_time::ptime createdTime = boost::posix_time::second_clock::universal_time();
-    std::cout << "createdTime:" << createdTime << std::endl;
+    LOG(INFO) << "createdTime:" << createdTime << std::endl;
     boost::posix_time::ptime endtimecal(createdTime);
-    std::cout << "endtimecal date:" << endtimecal << std::endl;
+    LOG(INFO) << "endtimecal date:" << endtimecal << std::endl;
     endtimecal = endtimecal +  boost::gregorian::days(0) + boost::posix_time::hours(1);
-    std::cout << "endtimecal date+hour:" << endtimecal << std::endl;
+    LOG(INFO) << "endtimecal date+hour:" << endtimecal << std::endl;
 
-    std::cout << "endtimecal:" << endtimecal << std::endl;
+    LOG(INFO) << "endtimecal:" << endtimecal << std::endl;
     
     Json::Value optdata ;
     Json::Value schemenameVal;
@@ -96,42 +98,43 @@ ERROR_CODES_BACCT testpgdbcommon::testCreateScheme() {
     int64_t sid;
     ret = pPgdbcommon->createScheme((std::string&)schemename, (long)1, 
     boost::posix_time::to_tm(createdTime), boost::posix_time::to_tm(endtimecal) , 1, optdata[OPTIONS_TAG_BACCT], sid);
-    std::cout << map_error((ERROR_CODES_BACCT)ret) << std::endl;
+    LOG(INFO) << map_error((ERROR_CODES_BACCT)ret) << std::endl;
     
     optdata = this->testparseJSON(sjson_1);
     schemenameVal = optdata[SCHEME_TAG_BACCT];
     schemename=schemenameVal.asString();
     ret = pPgdbcommon->createScheme((std::string&)schemename, (long)1, 
     boost::posix_time::to_tm(createdTime), boost::posix_time::to_tm(endtimecal) , 1, optdata[OPTIONS_TAG_BACCT], sid );
-    std::cout << map_error((ERROR_CODES_BACCT)ret)  << std::endl;
-    std::cout << "test.testCreateInitialScheme():" << schemename << ":" << map_error(ret) <<  std::endl;
+    LOG(INFO) << map_error((ERROR_CODES_BACCT)ret)  << std::endl;
+    LOG(INFO) << "test.testCreateInitialScheme():" << schemename << ":" << map_error(ret) <<  std::endl;
 
     optdata = this->testparseJSON(sjson_2);
     schemenameVal = optdata[SCHEME_TAG_BACCT];
     schemename=schemenameVal.asString();
     ret = pPgdbcommon->createScheme((std::string&)schemename, (long)1, 
     boost::posix_time::to_tm(createdTime), boost::posix_time::to_tm(endtimecal) , 1, optdata[OPTIONS_TAG_BACCT], sid );
-    std::cout << map_error((ERROR_CODES_BACCT)ret) << std::endl;
-    std::cout << "test.testCreateInitialScheme():" << schemename << ":" << map_error(ret) <<  std::endl;
+    LOG(INFO) << map_error((ERROR_CODES_BACCT)ret) << std::endl;
+    LOG(INFO) << "test.testCreateInitialScheme():" << schemename << ":" << map_error(ret) <<  std::endl;
 
     optdata = this->testparseJSON(sjson_20);
     schemenameVal = optdata[SCHEME_TAG_BACCT];
     schemename=schemenameVal.asString();
     ret = pPgdbcommon->createScheme((std::string&)schemename, (long)1, 
     boost::posix_time::to_tm(createdTime), boost::posix_time::to_tm(endtimecal) , 1, optdata[OPTIONS_TAG_BACCT], sid );
-    std::cout << map_error((ERROR_CODES_BACCT)ret)  << std::endl;
-    std::cout << "test.testCreateInitialScheme():" << schemename << ":" << map_error(ret) <<  std::endl;
+    LOG(INFO) << map_error((ERROR_CODES_BACCT)ret)  << std::endl;
+    LOG(INFO) << "test.testCreateInitialScheme():" << schemename << ":" << map_error(ret) <<  std::endl;
 
     optdata = this->testparseJSON(sjson_22);
     schemenameVal = optdata[SCHEME_TAG_BACCT];
     schemename=schemenameVal.asString();
     ret = pPgdbcommon->createScheme((std::string&)schemename, (long)1, 
     boost::posix_time::to_tm(createdTime), boost::posix_time::to_tm(endtimecal) , 1, optdata[OPTIONS_TAG_BACCT], sid );
-    std::cout << map_error((ERROR_CODES_BACCT)ret)  << std::endl;
-    std::cout << "test.testCreateInitialScheme():" << schemename << ":" << map_error(ret) <<  std::endl;
+    LOG(INFO) << map_error((ERROR_CODES_BACCT)ret)  << std::endl;
+    LOG(INFO) << "test.testCreateInitialScheme():" << schemename << ":" << map_error(ret) <<  std::endl;
     return ret ; 
     
 }
+     
 
 
 //Test creating bet 
@@ -139,13 +142,13 @@ ERROR_CODES_BACCT testpgdbcommon::testCreateBet() {
     pgdbcommon* pPgdbcommon = pgdbcommon::GetInstance();
  
     boost::posix_time::ptime createdTime = boost::posix_time::second_clock::universal_time();
-    std::cout << "createdTime:" << createdTime << std::endl;
+    LOG(INFO) << "createdTime:" << createdTime << std::endl;
     boost::posix_time::ptime endtimecal(createdTime);
-    std::cout << "endtimecal date:" << endtimecal << std::endl;
+    LOG(INFO) << "endtimecal date:" << endtimecal << std::endl;
     endtimecal = endtimecal +  boost::gregorian::days(0) + boost::posix_time::hours(1);
-    std::cout << "endtimecal date+hour:" << endtimecal << std::endl;
+    LOG(INFO) << "endtimecal date+hour:" << endtimecal << std::endl;
 
-    std::cout << "endtimecal:" << endtimecal << std::endl;
+    LOG(INFO) << "endtimecal:" << endtimecal << std::endl;
     
     Json::Value optdata ;
     ERROR_CODES_BACCT ret = ERROR_OTHER;
@@ -204,13 +207,13 @@ ERROR_CODES_BACCT testpgdbcommon::testGetSchemeOptList() {
     pgdbcommon* pPgdbcommon = pgdbcommon::GetInstance();
  
     boost::posix_time::ptime createdTime = boost::posix_time::second_clock::universal_time();
-    std::cout << "createdTime:" << createdTime << std::endl;
+    LOG(INFO) << "createdTime:" << createdTime << std::endl;
     boost::posix_time::ptime endtimecal(createdTime);
-    std::cout << "endtimecal date:" << endtimecal << std::endl;
+    LOG(INFO) << "endtimecal date:" << endtimecal << std::endl;
     endtimecal = endtimecal +  boost::gregorian::days(0) + boost::posix_time::hours(1);
-    std::cout << "endtimecal date+hour:" << endtimecal << std::endl;
+    LOG(INFO) << "endtimecal date+hour:" << endtimecal << std::endl;
 
-    std::cout << "endtimecal:" << endtimecal << std::endl;
+    LOG(INFO) << "endtimecal:" << endtimecal << std::endl;
     
     Json::Value optdata ;
     ERROR_CODES_BACCT ret = ERROR_OTHER;
@@ -231,7 +234,7 @@ ERROR_CODES_BACCT testpgdbcommon::testGetSchemeOptList() {
     Json::Value root;
     ret = pPgdbcommon->getFullSchemeOptionNamesID(root);
 
-    std::cout << " Full scheme:options" << root  << std::endl;
+    LOG(INFO) << " Full scheme:options" << root  << std::endl;
     
     return ret ;
 }
@@ -242,13 +245,13 @@ ERROR_CODES_BACCT testpgdbcommon::testCreateUser() {
     pgdbcommon* pPgdbcommon = pgdbcommon::GetInstance();
  
     boost::posix_time::ptime createdTime = boost::posix_time::second_clock::universal_time();
-    std::cout << "createdTime:" << createdTime << std::endl;
+    LOG(INFO) << "createdTime:" << createdTime << std::endl;
     boost::posix_time::ptime endtimecal(createdTime);
-    std::cout << "endtimecal date:" << endtimecal << std::endl;
+    LOG(INFO) << "endtimecal date:" << endtimecal << std::endl;
     endtimecal = endtimecal +  boost::gregorian::days(0) + boost::posix_time::hours(1);
-    std::cout << "endtimecal date+hour:" << endtimecal << std::endl;
+    LOG(INFO) << "endtimecal date+hour:" << endtimecal << std::endl;
 
-    std::cout << "endtimecal:" << endtimecal << std::endl;
+    LOG(INFO) << "endtimecal:" << endtimecal << std::endl;
     
     Json::Value optdata ;
     ERROR_CODES_BACCT ret = ERROR_OTHER;
@@ -281,7 +284,7 @@ ERROR_CODES_BACCT testpgdbcommon::testCreateUser() {
                         );
 
         retroot[UID_TAG_BACCT] = (Json::Int64)uid;
-        std::cout << "User ID: " << uid;
+        LOG(INFO) << "User ID: " << uid;
     }
     {
         optdata = this->testparseJSON(sjson_user_2);
@@ -312,7 +315,7 @@ ERROR_CODES_BACCT testpgdbcommon::testCreateUser() {
                         );
 
         retroot[UID_TAG_BACCT] = (Json::Int64)uid;
-        std::cout << "User ID: " << uid;
+        LOG(INFO) << "User ID: " << uid;
     }
     {
         optdata = this->testparseJSON(sjson_user_3);
@@ -343,7 +346,7 @@ ERROR_CODES_BACCT testpgdbcommon::testCreateUser() {
                         );
 
         retroot[UID_TAG_BACCT] = (Json::Int64)uid;
-        std::cout << "User ID: " << uid;
+        LOG(INFO) << "User ID: " << uid;
     }
     return ret ;
 }
@@ -354,13 +357,13 @@ ERROR_CODES_BACCT testpgdbcommon::testFinalizeUser() {
     pgdbcommon* pPgdbcommon = pgdbcommon::GetInstance();
  
     boost::posix_time::ptime createdTime = boost::posix_time::second_clock::universal_time();
-    std::cout << "createdTime:" << createdTime << std::endl;
+    LOG(INFO) << "createdTime:" << createdTime << std::endl;
     boost::posix_time::ptime endtimecal(createdTime);
-    std::cout << "endtimecal date:" << endtimecal << std::endl;
+    LOG(INFO) << "endtimecal date:" << endtimecal << std::endl;
     endtimecal = endtimecal +  boost::gregorian::days(0) + boost::posix_time::hours(1);
-    std::cout << "endtimecal date+hour:" << endtimecal << std::endl;
+    LOG(INFO) << "endtimecal date+hour:" << endtimecal << std::endl;
 
-    std::cout << "endtimecal:" << endtimecal << std::endl;
+    LOG(INFO) << "endtimecal:" << endtimecal << std::endl;
     
     Json::Value optdata ;
     ERROR_CODES_BACCT ret = ERROR_OTHER;

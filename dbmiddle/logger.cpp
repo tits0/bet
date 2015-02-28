@@ -20,10 +20,10 @@ int logger::Init()
 
 int logger::Dump()
 {
-    m_conf.setFromBase(&c);
     // Values are always std::string
 
-    LOG(INFO) << "Log using default file";
+    LOG(INFO) << "Log Dump";
+    //LOG(INFO) << this->m_conf.;
     return 0;
 }
 

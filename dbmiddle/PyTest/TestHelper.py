@@ -48,29 +48,29 @@ import json
 # Whatever structure you need to send goes here:
 
 class JSONDefs():
-     def __init__(self): 
+    def __init__(self): 
      
 
-        self.UID_TAG_BACCT  "uid"
-        self.SESSION_TAG_BACCT  "session"
-        self.SCHEME_TAG_BACCT  "scheme"
-        self.SCHEME_DAYS_BACCT  "sch_days"
-        self.SCHEME_HRS_BACCT  "sch_hrs"
+        self.UID_TAG_BACCT = "uid"
+        self.SESSION_TAG_BACCT =  "session"
+        self.SCHEME_TAG_BACCT =  "scheme"
+        self.SCHEME_DAYS_BACCT =  "sch_days"
+        self.SCHEME_HRS_BACCT =  "sch_hrs"
 
-        self.SCHEME_ID_TAG_BACCT "schid"
-        self.SCHEME_TOTAL_TAG_BACCT "schtot"
-        self.SCHEME_START_TAG_BACCT "schstart"
-        self.SCHEME_END_TAG_BACCT "schend"
+        self.SCHEME_ID_TAG_BACCT = "schid"
+        self.SCHEME_TOTAL_TAG_BACCT = "schtot"
+        self.SCHEME_START_TAG_BACCT=  "schstart"
+        self.SCHEME_END_TAG_BACCT=  "schend"
 
-        self.OPTIONS_TAG_BACCT  "options"
-        self.OPTION_ID_TAG_BACCT "optid"
-        self.OPTION_PTS_BACCT "optpt"
-        self.OPTION_LIST_BACCT "optlist"
-        self.BET_POINTS_TAG_BACCT "betpt"
+        self.OPTIONS_TAG_BACCT =  "options"
+        self.OPTION_ID_TAG_BACCT = "optid"
+        self.OPTION_PTS_BACCT = "optpt"
+        self.OPTION_LIST_BACCT = "optlist"
+        self.BET_POINTS_TAG_BACCT = "betpt"
 
-        self.OPTIONS_UNAME_BACCT  "uname"
-        self.OPTIONS_ADDR_BACCT  "addr"
-        self.OPTIONS_PASS_BACCT  "pss"
+        self.OPTIONS_UNAME_BACCT  = "uname"
+        self.OPTIONS_ADDR_BACCT  = "addr"
+        self.OPTIONS_PASS_BACCT  = "pss"
 
 
         self.sjson_0="{\"uid\":12345567, \"session\":\"7654321\" , \"scheme\":\"s1\", \"options\":[] }"
@@ -119,11 +119,11 @@ class JSONDefs():
         jdata=json.dumps(data)
         urllib2.urlopen("http://localhost:8000/api/newbet", jdata)
                 
-    def sendCreateUser(self, username , pass , addr ):
+    def sendCreateUser(self, username , passsec , addr ):
         optdata ={}
-        optdata[self.OPTIONS_UNAME_BACCT];
-        optdata[self.OPTIONS_PASS_BACCT]; 
-        optdata[self.OPTIONS_ADDR_BACCT]; 
+        optdata[self.OPTIONS_UNAME_BACCT] = username;
+        optdata[self.OPTIONS_PASS_BACCT] = passsec; 
+        optdata[self.OPTIONS_ADDR_BACCT] = addr ; 
 
         jdata=json.dumps(data)
         urllib2.urlopen("http://localhost:8000/api/newuser", jdata)

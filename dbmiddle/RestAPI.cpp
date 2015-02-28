@@ -4,6 +4,9 @@
 #include "mongoose.h"
 #include <stdio.h>
 #include <string.h>
+#include "logger.h"
+
+
 const char *s_no_cache_header =  "Cache-Control: max-age=0, post-check=0, "
   "pre-check=0, no-store, no-cache, must-revalidate\r\n";
 
@@ -22,7 +25,7 @@ int RestAPI::handle_restful_call(struct mg_connection *conn, enum mg_event ev) {
   switch (ev) {
     case MG_AUTH: return MG_TRUE;
     case MG_REQUEST:
-        std::cout << "calling uri:" << conn->uri << std::endl;
+        LOG(INFO) << "calling uri:" << conn->uri << std::endl;
         // Read POST data
         int post_data_len;
         mg_get_var(conn, "req", cjsondata, sizeof(cjsondata));
@@ -67,7 +70,7 @@ int RestAPI::RunRestServer(void) {
   mg_set_option(m_server, "listening_port", "8000");
 
   // Serve request. Hit Ctrl-C to terminate the program
-  std::cout << "Starting on port " << mg_get_option(m_server, "listening_port") << std::endl;
+  LOG(INFO) << "Starting on port " << mg_get_option(m_server, "listening_port") << std::endl;
   for (;;) {
     mg_poll_server(m_server, 1000);
   }
