@@ -38,8 +38,8 @@ class TestDB(unittest.TestCase):
         pass
 
     def test_01_CreateInitialScheme(self):
-        import pdb; pdb.set_trace()
-        TestHelper.dbConnect()
+
+        self.dbConnect()
         self.assertTrue(TestHelper.checkTableExists(conn=self.conn, sch_str='public', table_str='bet' ), "Error: Table bet not found" )
         self.assertTrue(TestHelper.checkTableExists(conn=self.conn, sch_str='public', table_str='scheme' ), "Error: Table scheme not found" )
         self.assertTrue(TestHelper.checkTableExists(conn=self.conn, sch_str='public', table_str='options' ), "Error: Table options not found" )
@@ -51,22 +51,22 @@ class TestDB(unittest.TestCase):
         self.assertTrue(TestHelper.checkTableExists(conn=self.conn, sch_str='public', table_str='finalizebet' ), "Error: Table finalizebet not found" )
 
     def test_02_checkSchemeTable(self):
-        TestHelper.dbConnect()
+        self.dbConnect()
         try:
             self.startServer()
             rows = TestHelper.checkSchemeTable(conn=self.conn, scheme_name='s3', options=2, total=0)
             self.assertTrue(len(rows)==1, "Error: no rows not found" )
             self.stopServer()
-        except Exception e:
+        except Exception as e:
             self.assertTrue( False, "Error: %s" % str(e) )
             
     def test_03_checkSchemeTable(self):
-        TestHelper.dbConnect()
+        self.dbConnect()
         rows = TestHelper.checkSchemeTable(conn=self.conn, scheme_name='s3', options=2, total=0)
         self.assertTrue(len(rows)==1, "Error: no rows not found" )
 
     def test_04_checkSchemeTable(self):
-        TestHelper.dbConnect()
+        self.dbConnect()
         rows = TestHelper.checkSchemeTable(conn=self.conn, scheme_name='s3', options=2, total=0)
         self.assertTrue(len(rows)==1, "Error: no rows not found" )
 
